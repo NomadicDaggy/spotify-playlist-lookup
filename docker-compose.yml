@@ -11,7 +11,8 @@ services:
     env_file:
       - ./.env.dev
     depends_on:
-      - db
+      db:
+        condition: service_healthy
   db:
     image: postgres:13-alpine
     volumes:
@@ -20,6 +21,11 @@ services:
       - POSTGRES_USER=hello_flask
       - POSTGRES_PASSWORD=hello_flask
       - POSTGRES_DB=hello_flask_dev
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 1s
+      timeout: 20s
+      retries: 10
 
 volumes:
   postgres_data:
