@@ -6,8 +6,8 @@ services:
       context: ./services/web
       dockerfile: Dockerfile.prod
     command: gunicorn --bind 0.0.0.0:5000 manage:app
-    ports:
-      - 5000:5000
+    expose:
+      - 5000
     env_file:
       - ./.env.prod
     depends_on:
@@ -18,6 +18,12 @@ services:
       - postgres_data_prod:/var/lib/postgresql/data/
     env_file:
       - ./.env.prod.db
+  nginx:
+    build: ./services/nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
 
 volumes:
   postgres_data_prod:
