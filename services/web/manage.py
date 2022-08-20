@@ -18,5 +18,6 @@ def seed_db():
     db.session.add(User(email="dagsagrinbergs@gmail.com"))
     db.session.commit()
 
+
 if __name__ == "__main__":
     cli()
