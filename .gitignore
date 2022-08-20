@@ -130,3 +130,4 @@ dmypy.json
 .env.prod.db
 .gitignore
 .env.prod
+services/web/project/media/
