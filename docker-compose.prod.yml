@@ -22,6 +22,7 @@ services:
       - postgres_data_prod:/var/lib/postgresql/data/
     env_file:
       - ./.env.prod.db
+    user: postgres
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 1s
