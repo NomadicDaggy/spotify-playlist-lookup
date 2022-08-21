@@ -9,3 +9,5 @@ app.secret_key = app.config["SECRET_KEY"]
 db = SQLAlchemy(app)
 login = LoginManager(app)
 login.login_view = "login"
+
+from app import routes, models
