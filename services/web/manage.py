@@ -15,7 +15,7 @@ def create_db():
 
 @cli.command("seed_db")
 def seed_db():
-    db.session.add(User(email="dagsagrinbergs@gmail.com"))
+    db.session.add(User(email="example@gmail.com"))
     db.session.commit()
 
 
