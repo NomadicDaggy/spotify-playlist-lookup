@@ -1,9 +1,15 @@
 import os
 
 from werkzeug.utils import secure_filename
-from flask import Flask, jsonify, send_from_directory, request, redirect, url_for
+from flask import Flask, jsonify, send_from_directory, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin
+from flask_login import (
+    LoginManager,
+    UserMixin,
+    login_required,
+    logout_user,
+    current_user,
+)
 from flask_dance.contrib.github import make_github_blueprint, github
 from flask_dance.consumer.storage.sqla import OAuthConsumerMixin, SQLAlchemyStorage
 
@@ -13,11 +19,6 @@ app.config.from_object("project.config.Config")
 app.secret_key = app.config["SECRET_KEY"]
 
 db = SQLAlchemy(app)
-
-blueprint = make_github_blueprint(
-    client_id=app.config["GITHUB_OAUTH_CLIENT_ID"],
-    client_secret=app.config["GITHUB_OAUTH_CLIENT_SECRET"],
-)
 
 
 class User(db.Model):
@@ -31,32 +32,9 @@ class User(db.Model):
         self.email = email
 
 
-class OAuth(OAuthConsumerMixin, db.Model):
-    provider_user_id = db.Column(db.String(256), unique=True, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey(User.id), nullable=False)
-    user = db.relationship(User)
-
-
-login_manager = LoginManager()
-login_manager.login_view = "github.login"
-
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-
-# blueprint.storage = SQLAlchemyStorage(OAuth, db.session, user=load_user)
-app.register_blueprint(blueprint, url_prefix="/login")
-
-
 @app.route("/")
 def index():
-    if not github.authorized:
-        return redirect(url_for("github.login"))
-    resp = github.get("/user")
-    assert resp.ok
-    return "You are @{login} on GitHub".format(login=resp.json()["login"])
+    return jsonify(hello="world")
 
 
 @app.route("/static/<path:filename>")

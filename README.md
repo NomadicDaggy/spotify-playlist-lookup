@@ -13,3 +13,5 @@ For production deployment use `prod_run.sh`, but that also requires `.env.prod` 
 The app is visible at localhost:5000
 
 You can connect to the database with `sudo docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev`
+
+And see server logs with `docker-compose logs -f`
