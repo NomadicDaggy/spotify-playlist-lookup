@@ -131,4 +131,4 @@ dmypy.json
 .gitignore
 .env.prod
 .env.dev
-services/web/project/media/
+services/web/app/media/
