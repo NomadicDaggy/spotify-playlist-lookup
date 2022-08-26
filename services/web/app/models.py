@@ -25,3 +25,21 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+playlist_track = db.Table(
+    "playlist_track",
+    db.Column("playlist_id", db.Integer, db.ForeignKey("playlist.id")),
+    db.Column("track_id", db.Integer, db.ForeignKey("track.id")),
+)
+
+
+class Playlist(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
+
+
+class Track(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
+    name = db.Column(db.String(200), index=True, unique=True, nullable=False)
