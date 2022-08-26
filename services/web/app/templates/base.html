@@ -10,11 +10,11 @@
 
 <body>
     <div>Daggys test site:
-        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('route_blueprint.index') }}">Home</a>
         {% if current_user.is_anonymous %}
-        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('route_blueprint.login') }}">Login</a>
         {% else %}
-        <a href="{{ url_for('logout') }}">Logout</a>
+        <a href="{{ url_for('route_blueprint.logout') }}">Logout</a>
         {% endif %}
     </div>
     <hr>

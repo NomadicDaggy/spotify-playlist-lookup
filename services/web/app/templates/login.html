@@ -21,5 +21,5 @@
     <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
     <p>{{ form.submit() }}</p>
 </form>
-<p>New User? <a href="{{ url_for('register') }}">Click to Register!</a></p>
+<p>New User? <a href="{{ url_for('route_blueprint.register') }}">Click to Register!</a></p>
 {% endblock %}
