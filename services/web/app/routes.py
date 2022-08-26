@@ -63,31 +63,3 @@ def register():
         flash("Congratulation, you are now a registered user!")
         return redirect(url_for("login"))
     return render_template("register.html", title="Register", form=form)
-
-
-@app.route("/static/<path:filename>")
-@login_required
-def staticfiles(filename):
-    return send_from_directory(app.config["STATIC_FOLDER"], filename)
-
-
-@app.route("/media/<path:filename>")
-@login_required
-def mediafiles(filename):
-    return send_from_directory(app.config["MEDIA_FOLDER"], filename)
-
-
-@app.route("/upload", methods=["GET", "POST"])
-@login_required
-def upload_file():
-    if request.method == "POST":
-        file = request.files["file"]
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config["MEDIA_FOLDER"], filename))
-    return """
-    <!doctype html>
-    <title>upload new File</title>
-    <form action="" method=post enctype=multipart/form-data>
-      <p><input type=file name=file><input type=submit value=Upload>
-    </form>
-    """
