@@ -1,10 +1,10 @@
 from flask.cli import FlaskGroup
 
-from app import app, db
-from app.models import User
+from app.models import User, db
+from app import create_app
 
 
-cli = FlaskGroup(app)
+cli = FlaskGroup(create_app=create_app)
 
 
 @cli.command("create_db")
