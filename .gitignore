@@ -131,3 +131,4 @@ dmypy.json
 .gitignore
 .env.prod
 services/web/app/media/
+.env.spotify
