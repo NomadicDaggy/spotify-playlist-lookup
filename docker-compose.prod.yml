@@ -6,9 +6,6 @@ services:
       context: ./services/web
       dockerfile: Dockerfile.prod
     command: gunicorn --bind 0.0.0.0:5000 manage:app
-    volumes:
-      - static_volume:/home/app/web/app/static
-      - media_volume:/home/app/web/app/media
     expose:
       - 5000
     env_file:
@@ -29,9 +26,6 @@ services:
       retries: 10
   nginx:
     build: ./services/nginx
-    volumes:
-      - static_volume:/home/app/web/app/static
-      - media_volume:/home/app/web/app/media
     ports:
       - 1337:80
     depends_on:
@@ -39,5 +33,3 @@ services:
 
 volumes:
   postgres_data_prod:
-  static_volume:
-  media_volume:
