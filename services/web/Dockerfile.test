@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y netcat
 # update pip, so no warning
 RUN pip install --upgrade pip
 # put pip requirements
-COPY ./requirements.txt /usr/src/app/requirements.test.txt
+COPY ./requirements.test.txt /usr/src/app/requirements.test.txt
 # install them
 RUN pip install -r requirements.test.txt
 
