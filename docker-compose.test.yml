@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./services/web
+    command: python manage.py run -h 0.0.0.0
+    volumes:
+      - ./services/web/:/usr/src/app/
+    ports:
+      - 1337:5000
+    env_file:
+      - ./.env.test
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=spotify_playlist_lookup
+      - POSTGRES_PASSWORD=spotify_playlist_lookup
+      - POSTGRES_DB=spotify_playlist_lookup_test
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 1s
+      timeout: 20s
+      retries: 10
+
+volumes:
+  postgres_data_test:
