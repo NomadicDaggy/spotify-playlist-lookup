@@ -25,19 +25,31 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 
-playlist_track = db.Table(
-    "playlist_track",
-    db.Column("playlist_id", db.Integer, db.ForeignKey("playlist.id")),
-    db.Column("track_id", db.Integer, db.ForeignKey("track.id")),
-)
+class PlaylistTrack(db.Model):
+    __tablename__ = "playlist_track"
+
+    # id = db.Column(db.Integer, primary_key=True)
+    playlist_id = db.Column(db.Integer, db.ForeignKey("playlists.id"), primary_key=True)
+    track_id = db.Column(db.Integer, db.ForeignKey("tracks.id"), primary_key=True)
+
+    track = db.relationship("Track", back_populates="playlists")
+    playlist = db.relationship("Playlist", back_populates="tracks")
 
 
 class Playlist(db.Model):
+    __tablename__ = "playlists"
+
     id = db.Column(db.Integer, primary_key=True)
     spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
+
+    tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 
 
 class Track(db.Model):
+    __tablename__ = "tracks"
+
     id = db.Column(db.Integer, primary_key=True)
     spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
     name = db.Column(db.String(200), index=True, unique=True, nullable=False)
+
+    playlists = db.relationship("PlaylistTrack", back_populates="track")
