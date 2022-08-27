@@ -50,6 +50,6 @@ class Track(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
-    name = db.Column(db.String(200), index=True, unique=True, nullable=False)
+    name = db.Column(db.String(200), index=True, nullable=False)
 
     playlists = db.relationship("PlaylistTrack", back_populates="track")
