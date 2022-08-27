@@ -12,11 +12,9 @@ def test_no_users():
     assert User.query.count() == 0
 
 
-def test_playlist_tracks(session):
-
+def test_add_playlist_tracks(session):
     playlists = [Playlist(spotify_id="0" * 22), Playlist(spotify_id="1" * 22)]
     session.add_all(playlists)
-
     tracks = [
         Track(spotify_id="0" * 22, name="0"),
         Track(spotify_id="1" * 22, name="1"),
@@ -24,7 +22,6 @@ def test_playlist_tracks(session):
         Track(spotify_id="3" * 22, name="3"),
     ]
     session.add_all(tracks)
-
     session.commit()
 
     playlist_tracks = [
@@ -34,7 +31,50 @@ def test_playlist_tracks(session):
         PlaylistTrack(playlist_id=2, track_id=4),
     ]
     session.add_all(playlist_tracks)
-
     session.commit()
 
     assert PlaylistTrack.query.count() == 4
+
+
+def test_insert_existing_playlist(session):
+    p = Playlist(spotify_id="0" * 22)
+    session.add(p)
+    session.commit()
+
+    session.add(p)
+    session.commit()
+    assert Playlist.query.count() == 1
+
+
+p_unique = {
+    "id": "0" * 22,
+    "tracks": [
+        {"id": "0" * 22, "name": "track0"},
+        {"id": "1" * 22, "name": "track1"},
+        {"id": "2" * 22, "name": "track2"},
+    ],
+}
+
+p_partial_overlap_1 = {
+    "id": "1" * 22,
+    "tracks": [
+        {"id": "3" * 22, "name": "track3"},
+        {"id": "4" * 22, "name": "track4"},
+    ],
+}
+
+p_parial_overlap_2 = {
+    "id": "2" * 22,
+    "tracks": [
+        {"id": "3" * 22, "name": "track3"},
+        {"id": "5" * 22, "name": "track5"},
+    ],
+}
+
+p_full_overlap = {
+    "id": "3" * 22,
+    "tracks": [
+        {"id": "3" * 22, "name": "track3"},
+        {"id": "5" * 22, "name": "track5"},
+    ],
+}
