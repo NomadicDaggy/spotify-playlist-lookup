@@ -18,9 +18,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=hello_flask
-      - POSTGRES_PASSWORD=hello_flask
-      - POSTGRES_DB=hello_flask_dev
+      - POSTGRES_USER=spotify_playlist_lookup
+      - POSTGRES_PASSWORD=spotify_playlist_lookup
+      - POSTGRES_DB=spotify_playlist_lookup_dev
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready" ]
       interval: 1s
