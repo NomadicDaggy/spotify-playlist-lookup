@@ -1,10 +1,12 @@
-from app.models import User, Playlist, Track, PlaylistTrack
+from app.models import User, Playlist, Track, PlaylistTrack, insert_playlists_tracks
 
 
 def test_insert_user(session):
+
     u = User(email="test@test.com", username="tester", active=True)
     session.add(u)
     session.commit()
+
     assert User.query.count() == 1
 
 
@@ -13,6 +15,7 @@ def test_no_users():
 
 
 def test_add_playlist_tracks(session):
+
     playlists = [Playlist(spotify_id="0" * 22), Playlist(spotify_id="1" * 22)]
     session.add_all(playlists)
     tracks = [
@@ -36,16 +39,6 @@ def test_add_playlist_tracks(session):
     assert PlaylistTrack.query.count() == 4
 
 
-def test_insert_existing_playlist(session):
-    p = Playlist(spotify_id="0" * 22)
-    session.add(p)
-    session.commit()
-
-    session.add(p)
-    session.commit()
-    assert Playlist.query.count() == 1
-
-
 p_unique = {
     "id": "0" * 22,
     "tracks": [
@@ -63,7 +56,7 @@ p_partial_overlap_1 = {
     ],
 }
 
-p_parial_overlap_2 = {
+p_partial_overlap_2 = {
     "id": "2" * 22,
     "tracks": [
         {"id": "3" * 22, "name": "track3"},
@@ -78,3 +71,29 @@ p_full_overlap = {
         {"id": "5" * 22, "name": "track5"},
     ],
 }
+
+
+def test_insert_unique_playlist_tracks():
+
+    insert_playlists_tracks(p_unique)
+
+    assert PlaylistTrack.query.count() == 3
+
+
+def test_insert_tracks_from_two_playlists():
+
+    insert_playlists_tracks(p_unique)
+    insert_playlists_tracks(p_partial_overlap_1)
+
+    assert Track.query.count() == 5
+    assert Playlist.query.count() == 2
+    assert PlaylistTrack.query.count() == 5
+
+
+def test_insert_overlapping_tracks():
+    insert_playlists_tracks(p_partial_overlap_1)
+    insert_playlists_tracks(p_partial_overlap_2)
+
+    assert Track.query.count() == 3
+    assert Playlist.query.count() == 2
+    # assert PlaylistTrack.query.count() == 4

@@ -53,3 +53,42 @@ class Track(db.Model):
     name = db.Column(db.String(200), index=True, nullable=False)
 
     playlists = db.relationship("PlaylistTrack", back_populates="track")
+
+
+def insert_playlists_tracks(playlist_dict):
+    """Inserts a playlist with tracks in the database
+
+    Example Input:
+    {
+        "id": "0" * 22,
+        "tracks": [
+            {"id": "0" * 22, "name": "track0"},
+            {"id": "1" * 22, "name": "track1"},
+            {"id": "2" * 22, "name": "track2"}]}
+
+    Inserts playlist, tracks and playlist-track relationships
+    """
+
+    # Add playlist
+    playlist_id = playlist_dict["id"]
+    if Playlist.query.filter_by(spotify_id=playlist_id).count() == 0:
+        p = Playlist(spotify_id=playlist_id)
+        db.session.add(p)
+        db.session.flush()
+    else:
+        p = Playlist.query.filter_by(spoftfy_id=playlist_id).first()
+
+    # Add tracks
+    tracks_to_add = []
+    for track in playlist_dict["tracks"]:
+        if Track.query.filter_by(spotify_id=track["id"]).count() == 0:
+            tracks_to_add.append(Track(spotify_id=track["id"], name=track["name"]))
+    db.session.add_all(tracks_to_add)
+    db.session.flush()
+
+    # Add relationships
+    relationships_to_add = []
+    for track in tracks_to_add:
+        relationships_to_add.append(PlaylistTrack(playlist_id=p.id, track_id=track.id))
+    db.session.add_all(relationships_to_add)
+    db.session.commit()
