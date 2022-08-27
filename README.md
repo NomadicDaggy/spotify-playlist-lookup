@@ -1,12 +1,10 @@
-# Flask on Docker
+# Spotify playlist lookup
 
-Site available at https://dags.dev
+Service, that allows lookup of Spotify playlists by songs that they contain. 
 
-My step-through of this guide: https://github.com/testdrivenio/flask-on-docker
+Site NOT available at https://dags.dev
 
-Adding login functionality from: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world
-
-SSL cert generated with letsencrypt
+Upstream: https://github.com/NomadicDaggy/flask-on-docker
 
 ## Usage
 
@@ -15,6 +13,8 @@ Requires docker and docker-compose
 For running the development version see `dev_run.sh`
 
 For production deployment use `prod_run.sh`, but that also requires `.env.prod` and `.env.prod.db` to be created and filled
+
+For testing, run from test_run.sh
 
 The app is visible at localhost:1337
 
