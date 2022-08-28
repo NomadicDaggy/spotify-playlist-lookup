@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="/search_playlists" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.search_term }} {{ form.submit() }}<br>
+    </p>
+    <div>
+        {{ results }}
+    </div>
+</form>
+
+{% endblock %}

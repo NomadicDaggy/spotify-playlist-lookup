@@ -37,3 +37,10 @@ class PlaylistInputForm(FlaskForm):
         "Spotify playlist ids, comma separated", validators=[DataRequired()]
     )
     submit = SubmitField("Import")
+
+
+class PlaylistSearchForm(FlaskForm):
+    search_term = StringField(
+        "Search playlists by song name", validators=[DataRequired()]
+    )
+    submit = SubmitField("Search")

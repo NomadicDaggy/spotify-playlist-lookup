@@ -21,3 +21,10 @@ The app is visible at localhost:1337
 You can connect to the database with `sudo docker-compose exec db psql --username=hello_flask --dbname=hello_flask_dev`
 
 And see server logs with `docker-compose logs -f`
+
+## Big stuff missing
+
+* Async
+* Logs
+* Comprehensive tests
+

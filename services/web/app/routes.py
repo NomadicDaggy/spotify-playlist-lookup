@@ -8,10 +8,11 @@ from flask import (
 )
 from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
+from sqlalchemy import select
 
 
-from app.forms import LoginForm, RegistrationForm, PlaylistInputForm
-from app.models import User, db, insert_playlists_tracks
+from app.forms import LoginForm, RegistrationForm, PlaylistInputForm, PlaylistSearchForm
+from app.models import User, db, insert_playlists_tracks, Track, PlaylistTrack, Playlist
 from app.api_data_import import MaterializedPlaylist
 
 
@@ -24,11 +25,47 @@ def index():
     return render_template("index.html", title="Home")
 
 
+@route_blueprint.route("/search_playlists", methods=["GET", "POST"])
+@login_required
+def search_playlists():
+    form = PlaylistSearchForm()
+    if form.validate_on_submit():
+        track = Track.query.filter_by(name=form.search_term.data).first()
+        if track:
+            # default
+            results = "Track found, but no new playlists contain it"
+
+            # TODO: Find playlists that contain the track
+
+            return render_template(
+                "search_playlists.html",
+                title="Search Playlists",
+                form=form,
+                results=results,
+            )
+        else:
+            return render_template(
+                "search_playlists.html",
+                title="Search Playlists",
+                form=form,
+                results="Track not found, try again!",
+            )
+
+    return render_template(
+        "search_playlists.html",
+        title="Search Playlists",
+        form=form,
+        results="Playlists will appear here",
+    )
+
+
 @route_blueprint.route("/import_playlists", methods=["GET", "POST"])
 @login_required
 def import_playlists():
     form = PlaylistInputForm()
     if form.validate_on_submit():
+        # TODO: Should this block be abstracted out to somewhere else?
+        #
         # get each playlist id
         playlist_ids = form.playlist_ids.data.split(",")
         for p in playlist_ids:
