@@ -90,10 +90,12 @@ def test_insert_tracks_from_two_playlists():
     assert PlaylistTrack.query.count() == 5
 
 
-def test_insert_overlapping_tracks():
-    insert_playlists_tracks(p_partial_overlap_1)
+def test_insert_fully_overlapping_tracks():
+
     insert_playlists_tracks(p_partial_overlap_2)
 
-    assert Track.query.count() == 3
+    insert_playlists_tracks(p_full_overlap)
+
+    assert Track.query.count() == 2
     assert Playlist.query.count() == 2
-    # assert PlaylistTrack.query.count() == 4
+    assert PlaylistTrack.query.count() == 4

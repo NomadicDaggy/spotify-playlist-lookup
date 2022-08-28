@@ -1,6 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 
 
 db = SQLAlchemy()
@@ -28,12 +29,15 @@ class User(UserMixin, db.Model):
 class PlaylistTrack(db.Model):
     __tablename__ = "playlist_track"
 
-    # id = db.Column(db.Integer, primary_key=True)
-    playlist_id = db.Column(db.Integer, db.ForeignKey("playlists.id"), primary_key=True)
-    track_id = db.Column(db.Integer, db.ForeignKey("tracks.id"), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    playlist_id = db.Column(db.Integer, db.ForeignKey("playlists.id"))
+    track_id = db.Column(db.Integer, db.ForeignKey("tracks.id"))
 
     track = db.relationship("Track", back_populates="playlists")
     playlist = db.relationship("Playlist", back_populates="tracks")
+
+    def __repr__(self):
+        return f"{self.playlist_id} {self.track_id}"
 
 
 class Playlist(db.Model):
@@ -53,6 +57,9 @@ class Track(db.Model):
     name = db.Column(db.String(200), index=True, nullable=False)
 
     playlists = db.relationship("PlaylistTrack", back_populates="track")
+
+    def __repr__(self):
+        return f"Track {self.id} {self.spotify_id} {self.name}"
 
 
 def insert_playlists_tracks(playlist_dict):
@@ -81,14 +88,20 @@ def insert_playlists_tracks(playlist_dict):
     # Add tracks
     tracks_to_add = []
     for track in playlist_dict["tracks"]:
-        if Track.query.filter_by(spotify_id=track["id"]).count() == 0:
-            tracks_to_add.append(Track(spotify_id=track["id"], name=track["name"]))
-    db.session.add_all(tracks_to_add)
-    db.session.flush()
+
+        track_sid = track["id"]
+        if Track.query.filter_by(spotify_id=track_sid).count() == 0:
+            t = Track(spotify_id=track_sid, name=track["name"])
+            db.session.add(t)
+            db.session.flush()
+        else:
+            t = Track.query.filter_by(spotify_id=track_sid).first()
+
+        tracks_to_add.append(t)
 
     # Add relationships
-    relationships_to_add = []
     for track in tracks_to_add:
-        relationships_to_add.append(PlaylistTrack(playlist_id=p.id, track_id=track.id))
-    db.session.add_all(relationships_to_add)
+        r = PlaylistTrack(playlist_id=p.id, track_id=track.id)
+        db.session.add(r)
+
     db.session.commit()
