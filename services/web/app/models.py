@@ -1,7 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.exc import IntegrityError
 
 
 db = SQLAlchemy()
@@ -62,6 +61,14 @@ class Track(db.Model):
         return f"Track {self.id} {self.spotify_id} {self.name}"
 
 
+# TODO: insert_playlist_tracks() does a bit too much and should be split.
+#
+# Maybe it should be coupled to the db model classes? Maybe as a wrapper around
+# them with a new separate __init__ function for each model class, so that
+# you could create and insert a new Track, just by calling Track(playlist_dict).add().commit()
+# or something like that. ...But then you would have to specify the dict many times, so rather
+# better would be a class for the playlist object from the api, so like ApiPlaylist.insert_all()
+# But I still don't like the coupling between the API data and the database model...
 def insert_playlists_tracks(playlist_dict):
     """Inserts a playlist with tracks in the database
 
@@ -90,15 +97,19 @@ def insert_playlists_tracks(playlist_dict):
     for track in playlist_dict["tracks"]:
 
         track_sid = track["id"]
+        # For each new track that should be inserted, check that that track is not already
+        # in the database.
+        #
         # This will be very inefficient for large numbers of Tracks, but is fine for now.
         #
         # A better way might be letting the database just reject duplicate
         # tracks and continue on, but I had trouble getting it to work, since
         # session.rollback rolls back the whole session, i.e. this whole test function.
         #
-        # An alternative and also better way might be to gather all the tracks in an array
+        # An alternative and also better way might be to gather all the tracks in a list
         # and filter all at once for duplicates in the database. Then add only non-dupes, but
         # save the dupes for PlaylistTrack adding later.
+        #
         # TODO: how to efficiently check dupes in list against database table?
         if Track.query.filter_by(spotify_id=track_sid).count() == 0:
             t = Track(spotify_id=track_sid, name=track["name"])

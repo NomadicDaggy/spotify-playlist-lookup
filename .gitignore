@@ -132,3 +132,4 @@ dmypy.json
 .env.prod
 services/web/app/media/
 .env.spotify
+.vscode/settings.json

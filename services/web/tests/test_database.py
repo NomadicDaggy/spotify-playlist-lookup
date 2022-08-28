@@ -14,7 +14,7 @@ def test_no_users():
     assert User.query.count() == 0
 
 
-def test_add_playlist_tracks(session):
+def test_manually_add_playlist_tracks(session):
 
     playlists = [Playlist(spotify_id="0" * 22), Playlist(spotify_id="1" * 22)]
     session.add_all(playlists)
