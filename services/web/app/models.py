@@ -90,7 +90,7 @@ def insert_playlists_tracks(playlist_dict):
         db.session.add(p)
         db.session.flush()
     else:
-        p = Playlist.query.filter_by(spoftfy_id=playlist_id).first()
+        p = Playlist.query.filter_by(spotify_id=playlist_id).first()
 
     # Add tracks
     tracks_to_add = []
