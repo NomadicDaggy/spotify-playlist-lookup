@@ -1,6 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import select
 
 
 db = SQLAlchemy()
@@ -59,6 +60,16 @@ class Track(db.Model):
 
     def __repr__(self):
         return f"Track {self.id} {self.spotify_id} {self.name}"
+
+    def get_playlists(self, search_term: str):
+        """search_term is an exact song name"""
+        return (
+            db.session.query(Playlist)
+            .filter(Playlist.id == PlaylistTrack.playlist_id)
+            .filter(Track.id == PlaylistTrack.track_id)
+            .filter(Track.name == search_term)
+            .all()
+        )
 
 
 # TODO: insert_playlist_tracks() does a bit too much and should be split.
