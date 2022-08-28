@@ -10,6 +10,7 @@ services:
       - 1337:5000
     env_file:
       - ./.env.dev
+      - ./.env.spotify
     depends_on:
       db:
         condition: service_healthy
@@ -17,6 +18,8 @@ services:
     image: postgres:13-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5444:5432
     environment:
       - POSTGRES_USER=spotify_playlist_lookup
       - POSTGRES_PASSWORD=spotify_playlist_lookup

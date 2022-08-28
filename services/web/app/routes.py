@@ -11,7 +11,8 @@ from werkzeug.urls import url_parse
 
 
 from app.forms import LoginForm, RegistrationForm, PlaylistInputForm
-from app.models import User, db
+from app.models import User, db, insert_playlists_tracks
+from app.api_data_import import MaterializedPlaylist
 
 
 route_blueprint = Blueprint("route_blueprint", __name__)
@@ -27,6 +28,16 @@ def index():
 @login_required
 def import_playlists():
     form = PlaylistInputForm()
+    if form.validate_on_submit():
+        # get each playlist id
+        playlist_ids = form.playlist_ids.data.split(",")
+        for p in playlist_ids:
+            mp = MaterializedPlaylist(p)
+            # get track data from spotify api
+            playlist_data = mp.get_data()
+            # insert into database
+            insert_playlists_tracks(playlist_data)
+
     return render_template("import_playlists.html", title="Import Playlists", form=form)
 
 
