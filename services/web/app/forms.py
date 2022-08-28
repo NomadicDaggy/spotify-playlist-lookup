@@ -29,3 +29,11 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError("Please use a different email address.")
+
+
+class PlaylistInputForm(FlaskForm):
+    # TODO: add validation for comma-separation and length of each id.
+    playlist_ids = StringField(
+        "Spotify playlist ids, comma separated", validators=[DataRequired()]
+    )
+    submit = SubmitField("Import")
