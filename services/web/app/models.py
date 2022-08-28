@@ -90,6 +90,16 @@ def insert_playlists_tracks(playlist_dict):
     for track in playlist_dict["tracks"]:
 
         track_sid = track["id"]
+        # This will be very inefficient for large numbers of Tracks, but is fine for now.
+        #
+        # A better way might be letting the database just reject duplicate
+        # tracks and continue on, but I had trouble getting it to work, since
+        # session.rollback rolls back the whole session, i.e. this whole test function.
+        #
+        # An alternative and also better way might be to gather all the tracks in an array
+        # and filter all at once for duplicates in the database. Then add only non-dupes, but
+        # save the dupes for PlaylistTrack adding later.
+        # TODO: how to efficiently check dupes in list against database table?
         if Track.query.filter_by(spotify_id=track_sid).count() == 0:
             t = Track(spotify_id=track_sid, name=track["name"])
             db.session.add(t)
