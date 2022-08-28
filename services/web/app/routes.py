@@ -10,7 +10,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from werkzeug.urls import url_parse
 
 
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, PlaylistInputForm
 from app.models import User, db
 
 
@@ -21,6 +21,13 @@ route_blueprint = Blueprint("route_blueprint", __name__)
 @route_blueprint.route("/index")
 def index():
     return render_template("index.html", title="Home")
+
+
+@route_blueprint.route("/import_playlists", methods=["GET", "POST"])
+@login_required
+def import_playlists():
+    form = PlaylistInputForm()
+    return render_template("import_playlists.html", title="Import Playlists", form=form)
 
 
 @route_blueprint.route("/login", methods=["GET", "POST"])
