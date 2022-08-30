@@ -22,6 +22,8 @@ You can connect to the database with `sudo docker-compose exec db psql --usernam
 
 And see server logs with `docker-compose logs -f`
 
+New migration from `services/web` folder with `flask db migrate -m "reason for migration"`
+
 ## Big stuff missing
 
 * Async

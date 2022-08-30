@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
+from flask_migrate import Migrate
 
 
 def create_app():
@@ -10,6 +11,7 @@ def create_app():
     from app.models import db, User
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     from app.routes import route_blueprint
 

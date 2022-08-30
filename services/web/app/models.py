@@ -1,7 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import select
+from datetime import datetime
 
 
 db = SQLAlchemy()
@@ -45,6 +45,12 @@ class Playlist(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
+    tracks_last_refreshed_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        server_default=db.func.now(),
+        server_onupdate=db.func.now(),
+    )
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 

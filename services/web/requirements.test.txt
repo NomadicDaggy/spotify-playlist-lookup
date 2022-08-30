@@ -10,4 +10,5 @@ psycopg2-binary==2.9.3
 pytest==7.1.2
 tekore==4.4.0
 python-dotenv==0.20.0
+flask-migrate==3.1.0
 black
