@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
@@ -7,7 +8,13 @@ from app.models import db, migrate, User
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object("app.config.Config")
+    env = os.getenv("FLASK_ENV")
+
+    confname = (
+        "app.config.Config" if env == "development" else "app.config.ProductionConfig"
+    )
+
+    app.config.from_object(confname)
     app.secret_key = app.config["SECRET_KEY"]
 
     db.init_app(app)
