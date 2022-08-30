@@ -2,14 +2,14 @@
 
 <head>
     {% if title %}
-    <title>{{ title }} - Daggys test site</title>
+    <title>{{ title }} - Spotify Playlist Lookup</title>
     {% else %}
-    <title>Welcome to Daggys test site</title>
+    <title>Welcome to Spotify Playlist Lookup!</title>
     {% endif %}
 </head>
 
 <body>
-    <div>Daggys test site:
+    <div>Spotify Playlist Lookup:
         <a href="{{ url_for('route_blueprint.index') }}">Home</a>
         {% if current_user.is_anonymous %}
         <a href="{{ url_for('route_blueprint.login') }}">Login</a>
