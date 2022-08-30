@@ -22,7 +22,7 @@ def seed_db():
         email="example@gmail.com",
         username="admin",
     )
-    user.set_password("admin")
+    user.set_password(app.config["DEFAULT_ADMIN_PASSWORD"])
     db.session.add(user)
     db.session.commit()
 
