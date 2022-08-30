@@ -6,10 +6,13 @@ services:
       context: ./services/web
       dockerfile: Dockerfile.prod
     command: gunicorn --bind 0.0.0.0:5000 manage:app
+    volumes:
+      - ./services/web/:/usr/src/app/
     expose:
       - 5000
     env_file:
       - ./.env.prod
+      - ./.env.spotify
     depends_on:
       db:
         condition: service_healthy
@@ -20,7 +23,11 @@ services:
     env_file:
       - ./.env.prod.db
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
+        ]
       interval: 1s
       timeout: 20s
       retries: 10
