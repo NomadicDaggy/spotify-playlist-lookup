@@ -1,6 +1,8 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from flask_migrate import Migrate
+
+from app.models import db, migrate, User
 
 
 def create_app():
@@ -8,10 +10,8 @@ def create_app():
     app.config.from_object("app.config.Config")
     app.secret_key = app.config["SECRET_KEY"]
 
-    from app.models import db, User
-
     db.init_app(app)
-    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
 
     from app.routes import route_blueprint
 
