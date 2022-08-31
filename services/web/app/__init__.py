@@ -1,3 +1,4 @@
+from distutils.log import debug
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
