@@ -52,6 +52,8 @@ class MaterializedPlaylist:
 
 
 if __name__ == "__main__":
-    p = MaterializedPlaylist("50CP5OXFyr6qmCX8wZoum5")
+    load_dotenv(".env.spotify")
+
+    p = MaterializedPlaylist("14zAdYu5s1rNOz93ZBmocv")
     d = p.get_data()
     print(d["tracks"], len(d["tracks"]))
