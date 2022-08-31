@@ -12,6 +12,7 @@ services:
       - 1337:5000
     env_file:
       - ./.env.test
+      - ./.env.spotify
     depends_on:
       db:
         condition: service_healthy
