@@ -22,7 +22,14 @@ route_blueprint = Blueprint("route_blueprint", __name__)
 @route_blueprint.route("/")
 @route_blueprint.route("/index")
 def index():
-    return render_template("index.html", title="Home")
+    playlist_count = Playlist.query.count()
+    track_count = Track.query.count()
+    return render_template(
+        "index.html",
+        title="Home",
+        playlist_count=playlist_count,
+        track_count=track_count,
+    )
 
 
 @route_blueprint.route("/search_playlists", methods=["GET", "POST"])
