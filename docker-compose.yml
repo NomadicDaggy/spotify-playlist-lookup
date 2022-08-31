@@ -11,6 +11,8 @@ services:
     env_file:
       - ./.env.dev
       - ./.env.spotify
+    environment:
+      - FLASK_DEBUG=1
     depends_on:
       db:
         condition: service_healthy
