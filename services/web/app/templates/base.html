@@ -1,6 +1,9 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/github-logo.css') }}">
+
     {% if title %}
     <title>{{ title }} - Spotify Playlist Lookup</title>
     {% else %}
@@ -9,27 +12,37 @@
 </head>
 
 <body>
-    <div>Spotify Playlist Lookup:
-        <a href="{{ url_for('route_blueprint.index') }}">Home</a>
-        {% if current_user.is_anonymous %}
-        <a href="{{ url_for('route_blueprint.login') }}">Login</a>
-        {% else %}
-        <a href="{{ url_for('route_blueprint.search_playlists') }}">Search Playlists</a>
-        <a href="{{ url_for('route_blueprint.import_playlists') }}">Import Playlists</a>
-        <a href="{{ url_for('route_blueprint.logout') }}">Logout</a>
-        {% endif %}
+    <div id="navbar">
+        <div id="left-links">
+            <a href="{{ url_for('route_blueprint.index') }}">Home</a>
+            {% if current_user.is_anonymous %}
+            <a href="{{ url_for('route_blueprint.login') }}">Login</a>
+            {% else %}
+            <a href="{{ url_for('route_blueprint.search_playlists') }}">Search Playlists</a>
+            <a href="{{ url_for('route_blueprint.import_playlists') }}">Import Playlists</a>
+            <a href="{{ url_for('route_blueprint.logout') }}">Logout</a>
+            {% endif %}
+        </div>
+        <a id="repo-link" href="https://github.com/NomadicDaggy/spotify-playlist-lookup">
+            <img id="gh-logo" src="{{ url_for('static', filename='img/GitHub-Mark-Light-32px.png') }}"
+                alt="Github Logo"></a>
     </div>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-    {% block content %}{% endblock %}
+    <div id="main-content">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <div id="footer">
+        Spotify Playlist Lookup is in no way related to Spotify AB<br>
+        © Dāgs Ādams Grīnbergs 2022
+    </div>
 </body>
 
 </html>

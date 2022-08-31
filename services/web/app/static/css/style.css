@@ -1,0 +1,88 @@
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
+}
+
+:root {
+    --main-bg-color: #282A3A;
+    --low-contrast-bg-color: #323448;
+    --main-text-color: rgb(207, 233, 228);
+    --secondary-text-color: #00BC96;
+}
+
+html {
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+}
+a {
+    color: var(--secondary-text-color);
+    text-decoration: none;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0;
+}
+
+#navbar {
+    color: var(--secondary-text-color);
+    padding: 10px 0 0 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+#left-links {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+    font-size: 16px;
+}
+#left-links > a {
+    /* background-color: var(--low-contrast-bg-color); */
+    /* border: solid 1px var(--low-contrast-bg-color); */
+    border-radius: 9px;
+    padding: 5px 10px;
+    margin: 0 10px;
+}
+#repo-link {
+    padding-right: 10px;
+    margin-left: auto;
+    border: none !important;
+}
+#logo {
+    font-size: 20px;
+    text-decoration: none;
+    font-weight: 600;
+    padding-right: 30px;
+}
+
+#main-content {
+    align-self: center;
+}
+#inline-logo {
+    color: var(--secondary-text-color);
+    font-size: 32px;
+    padding-right: 7px;
+}
+#homepage-stats {
+    padding-top: 20px;
+    text-align: center;
+}
+
+#footer {
+    color: var(--secondary-text-color);
+    justify-self: flex-end;
+    font-weight: 200;
+    font-size: 14px;
+    align-self: center;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+
