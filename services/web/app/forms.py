@@ -33,8 +33,10 @@ class RegistrationForm(FlaskForm):
 
 class PlaylistInputForm(FlaskForm):
     # TODO: add validation for comma-separation and length of each id.
-    playlist_ids = StringField(
-        "Spotify playlist ids, comma separated", validators=[DataRequired()]
+    playlist_ids = TextAreaField(
+        "Spotify playlist ids, comma separated",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Comma separated Spotify playlist IDs"},
     )
     submit = SubmitField("Import")
 

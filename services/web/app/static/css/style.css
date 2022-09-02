@@ -72,6 +72,9 @@ body {
     margin-bottom: unset;
     padding-top: 0;
 }
+#main-content.import_playlists {
+    padding-top: 40px;
+}
 #main-content.search_playlists {
     padding-top: 40px;
 }
@@ -81,7 +84,8 @@ body {
     grid-template-rows: 1fr auto;
     row-gap: 15px;
 }
-#search-fields input, textarea#search_link {
+#main-content.search_playlists input, #main-content.search_playlists textarea,
+#main-content.import_playlists input, #main-content.import_playlists textarea {
     border-radius: 4px;
     border: 1px #464863 solid;
     background-color: #464863;
@@ -112,6 +116,11 @@ input#submit:hover {
 textarea#search_link {
     height: 70px;
     min-width: 300px;
+}
+
+textarea#playlist_ids {
+    min-width: 500px;
+    min-height: 200px;
 }
 
 #inline-logo {
