@@ -68,12 +68,13 @@ class Track(db.Model):
     def __repr__(self):
         return f"Track {self.id} {self.spotify_id} {self.name}"
 
-    def get_playlists(self, search_term: str):
+    def get_playlists(self):
         """search_term is an exact song name"""
         return (
             db.session.query(Playlist)
             .filter(Playlist.id == PlaylistTrack.playlist_id)
             .filter(Track.id == PlaylistTrack.track_id)
+            .filter(Track.id == self.id)
             .all()
         )
 

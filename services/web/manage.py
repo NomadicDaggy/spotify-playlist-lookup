@@ -19,9 +19,10 @@ def seed_db():
     db.session.add(user)
     db.session.commit()
 
-    mp = MaterializedPlaylist("50CP5OXFyr6qmCX8wZoum5")
-    playlist_data = mp.get_data()
-    insert_playlists_tracks(playlist_data)
+    for i in ["50CP5OXFyr6qmCX8wZoum5", "6tlAGIxetz8wFTHeVIvC0N"]:
+        mp = MaterializedPlaylist(i)
+        playlist_data = mp.get_data()
+        insert_playlists_tracks(playlist_data)
 
 
 if __name__ == "__main__":

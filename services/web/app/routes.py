@@ -48,7 +48,8 @@ def search_playlists():
             results = "Track found, but no new playlists contain it"
 
             # Find playlists that contain the track
-            results = track.get_playlists(form.search_term.data)
+            results = track.get_playlists()
+            print(results)
             results = [p.spotify_id for p in results]
 
             return render_template(
