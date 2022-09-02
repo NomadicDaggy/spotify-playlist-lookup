@@ -2,7 +2,6 @@
 
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/github-logo.css') }}">
 
     {% if title %}
     <title>{{ title }} - Spotify Playlist Lookup</title>
@@ -27,7 +26,7 @@
             <img id="gh-logo" src="{{ url_for('static', filename='img/GitHub-Mark-Light-32px.png') }}"
                 alt="Github Logo"></a>
     </div>
-    <div id="main-content">
+    <div id="main-content" class="{{ self._TemplateReference__context.name.split('.html')[0] }}">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <ul>

@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from app.models import User
 
@@ -40,6 +40,9 @@ class PlaylistInputForm(FlaskForm):
 
 
 class PlaylistSearchForm(FlaskForm):
-    search_term = StringField("Search playlists by Exact Track Name")
-    search_link = StringField("Search playlists by Spotify Track Link")
+    search_term = StringField("By exact track name: ")
+    search_link = TextAreaField(
+        "By Spotify track link: ",
+        render_kw={"placeholder": "Drag song from Spotify client / Paste link"},
+    )
     submit = SubmitField("Search")
