@@ -74,7 +74,6 @@ class Track(db.Model):
             db.session.query(Playlist)
             .filter(Playlist.id == PlaylistTrack.playlist_id)
             .filter(Track.id == PlaylistTrack.track_id)
-            .filter(Track.name == search_term)
             .all()
         )
 
