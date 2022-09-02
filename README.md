@@ -28,6 +28,7 @@ Upstream: https://github.com/NomadicDaggy/flask-on-docker
 - [x] **Track Search** - searching playlists by tracks from the client.
 - [ ] **Spotify Login** - allow login with Spotify and automatically import user playlists.
 - [ ] **Playlist Updates** - periodically update oldest playlists with their new tracks (as a job of some sort).
+- [ ] **Mobile Front-End** - currently the layout is not responsive.
 
 ## Usage
 
