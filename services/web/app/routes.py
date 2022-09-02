@@ -37,7 +37,12 @@ def index():
 def search_playlists():
     form = PlaylistSearchForm()
     if form.validate_on_submit():
-        track = Track.query.filter_by(name=form.search_term.data).first()
+        if link := form.search_link.data:
+            track_id = link.split("/")[-1]
+            track = Track.query.filter_by(spotify_id=track_id).first()
+        else:
+            track = Track.query.filter_by(name=form.search_term.data).first()
+
         if track:
             # default
             results = "Track found, but no new playlists contain it"

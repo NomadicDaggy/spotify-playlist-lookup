@@ -40,7 +40,6 @@ class PlaylistInputForm(FlaskForm):
 
 
 class PlaylistSearchForm(FlaskForm):
-    search_term = StringField(
-        "Search playlists by song name", validators=[DataRequired()]
-    )
+    search_term = StringField("Search playlists by Exact Track Name")
+    search_link = StringField("Search playlists by Spotify Track Link")
     submit = SubmitField("Search")

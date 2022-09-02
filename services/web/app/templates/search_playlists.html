@@ -4,10 +4,12 @@
 
 <form action="/search_playlists" method="post" novalidate>
     {{ form.hidden_tag() }}
-    <p>
-        {{ form.search_term }} {{ form.submit() }}<br>
-    </p>
-    <div>
+    <div id="search-input">
+        {{ form.search_term.label }} {{ form.search_term }} <br>
+        {{ form.search_link.label }} {{ form.search_link }} <br>
+        {{ form.submit() }}
+    </div>
+    <div id="search-output">
         {% if results is iterable and (results is not string and results is not mapping) %}
         {% for r in results %}
         <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ r }}?utm_source=generator"
