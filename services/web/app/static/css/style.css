@@ -100,14 +100,14 @@ body {
 input#submit { /*  search button  */
     margin: 20px auto;
     display: block;
-    border: 1px solid var(--low-contrast-bg-color);
-    border-radius: 15px;
-    padding: 7px 20px;
-    font-size: 22px;
-    background-color: var(--main-text-color);
+    border: 1px solid var(--low-contrast-bg-color) !important;
+    border-radius: 15px !important;
+    padding: 7px 20px !important;
+    font-size: 22px !important;
+    background-color: var(--main-text-color) !important;
     font-family: 'Inter';
     font-weight: 500;
-    color:#282A3A;
+    color:#282A3A !important;
     cursor: pointer;
 }
 input#submit:hover {
