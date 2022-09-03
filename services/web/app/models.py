@@ -69,7 +69,6 @@ class Track(db.Model):
         return f"Track {self.id} {self.spotify_id} {self.name}"
 
     def get_playlists(self):
-        """search_term is an exact song name"""
         return (
             db.session.query(Playlist)
             .filter(Playlist.id == PlaylistTrack.playlist_id)

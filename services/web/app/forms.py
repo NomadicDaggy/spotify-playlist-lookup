@@ -42,8 +42,8 @@ class PlaylistInputForm(FlaskForm):
 
 
 class PlaylistSearchForm(FlaskForm):
-    search_term = StringField("By exact track name: ")
-    search_link = TextAreaField(
+    track_name = StringField("By exact track name: ")
+    track_link = TextAreaField(
         "By Spotify track link: ",
         render_kw={"placeholder": "Drag song from Spotify client / Paste link"},
     )

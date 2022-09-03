@@ -4,13 +4,16 @@
 
 <h2>Search Playlists</h2>
 
-<form action="/search_playlists" method="post" novalidate>
+<form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
+
     <div id="search-fields">
-        {{ form.search_term.label }} {{ form.search_term }}
-        {{ form.search_link.label }} {{ form.search_link }}
+        {{ form.track_name.label }} {{ form.track_name }}
+        {{ form.track_link.label }} {{ form.track_link }}
     </div>
+
     {{ form.submit() }}
+
     <div id="search-output">
         {% if results is iterable and (results is not string and results is not mapping) %}
         {% for r in results %}

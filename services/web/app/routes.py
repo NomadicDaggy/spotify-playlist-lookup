@@ -32,17 +32,21 @@ def index():
     )
 
 
-@route_blueprint.route("/search_playlists", methods=["GET", "POST"])
+@route_blueprint.route("/playlists", methods=["GET", "POST"])
 @login_required
 def search_playlists():
     form = PlaylistSearchForm()
+    print("here")
+    print(form.validate_on_submit())
     if form.validate_on_submit():
-        if link := form.search_link.data:
+        print("validated")
+        if link := form.track_link.data:
             track_id = link.split("/")[-1]
             track = Track.query.filter_by(spotify_id=track_id).first()
         else:
-            track = Track.query.filter_by(name=form.search_term.data).first()
+            track = Track.query.filter_by(name=form.track_name.data).first()
 
+        print(track)
         if track:
             # default
             results = "Track found, but no new playlists contain it"
@@ -70,11 +74,11 @@ def search_playlists():
         "search_playlists.html",
         title="Search Playlists",
         form=form,
-        results="Playlists will appear here",
+        results="",
     )
 
 
-@route_blueprint.route("/import_playlists", methods=["GET", "POST"])
+@route_blueprint.route("/playlists/import", methods=["GET", "POST"])
 @login_required
 def import_playlists():
     form = PlaylistInputForm()

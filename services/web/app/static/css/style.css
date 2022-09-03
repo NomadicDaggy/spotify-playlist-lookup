@@ -113,7 +113,7 @@ input#submit { /*  search button  */
 input#submit:hover {
     background-color: #00BC96;
 }
-textarea#search_link {
+textarea#track_link {
     height: 70px;
     min-width: 300px;
 }
