@@ -49,9 +49,12 @@ class MaterializedPlaylist:
             "id": self.playlist_id,
             "name": p["name"],
             "description": p["description"],
-            "image_url": p["images"][0]["url"],
             "owner_name": p["owner"]["display_name"],
         }
+
+        self.data["image_url"] = ""
+        if len(p["images"]) > 0:
+            self.data["image_url"] = p["images"][0]["url"]
 
         if include_tracks:
             self.data["tracks"] = [
