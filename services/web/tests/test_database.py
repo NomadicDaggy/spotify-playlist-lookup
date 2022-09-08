@@ -16,6 +16,10 @@ def test_no_users():
 
 p_unique = {
     "id": "0" * 22,
+    "name": "n1",
+    "description": "d1",
+    "image_url": "",
+    "owner_name": "",
     "tracks": [
         {"id": "0" * 22, "name": "track0"},
         {"id": "1" * 22, "name": "track1"},
@@ -25,6 +29,10 @@ p_unique = {
 
 p_partial_overlap_1 = {
     "id": "1" * 22,
+    "name": "n2",
+    "description": "d1",
+    "image_url": "",
+    "owner_name": "",
     "tracks": [
         {"id": "3" * 22, "name": "track3"},
         {"id": "4" * 22, "name": "track4"},
@@ -33,6 +41,10 @@ p_partial_overlap_1 = {
 
 p_partial_overlap_2 = {
     "id": "2" * 22,
+    "name": "n3",
+    "description": "d1",
+    "image_url": "",
+    "owner_name": "",
     "tracks": [
         {"id": "3" * 22, "name": "track3"},
         {"id": "5" * 22, "name": "track5"},
@@ -41,6 +53,10 @@ p_partial_overlap_2 = {
 
 p_full_overlap = {
     "id": "3" * 22,
+    "name": "n4",
+    "description": "d1",
+    "image_url": "",
+    "owner_name": "",
     "tracks": [
         {"id": "3" * 22, "name": "track3"},
         {"id": "5" * 22, "name": "track5"},

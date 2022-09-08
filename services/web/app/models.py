@@ -55,7 +55,7 @@ class Playlist(db.Model):
     )
     name = db.Column(db.String(100), nullable=False, server_default="")
     description = db.Column(db.String(300), nullable=False, server_default="")
-    image_url = db.Column(db.String(100), nullable=True, server_default="")
+    image_url = db.Column(db.String(300), nullable=True, server_default="")
     owner_name = db.Column(db.String(100), nullable=False, server_default="")
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
@@ -108,7 +108,13 @@ def insert_playlists_tracks(playlist_dict):
     # Add playlist
     playlist_id = playlist_dict["id"]
     if Playlist.query.filter_by(spotify_id=playlist_id).count() == 0:
-        p = Playlist(spotify_id=playlist_id)
+        p = Playlist(
+            spotify_id=playlist_id,
+            name=playlist_dict["name"],
+            description=playlist_dict["description"],
+            image_url=playlist_dict["image_url"],
+            owner_name=playlist_dict["owner_name"],
+        )
         db.session.add(p)
         db.session.flush()
     else:

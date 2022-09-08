@@ -41,8 +41,16 @@ class MaterializedPlaylist:
 
     def get_data(self) -> dict:
 
+        p = self.spotify.playlist(
+            self.playlist_id, fields="name,description,id,images.url,owner.display_name"
+        )
+
         self.data = {
             "id": self.playlist_id,
+            "name": p["name"],
+            "description": p["description"],
+            "image_url": p["images"][0]["url"],
+            "owner_name": p["owner"]["display_name"],
             "tracks": [
                 self._format_track(t) for t in self._get_playlist_tracks_from_api()
             ],
