@@ -4,6 +4,8 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+from app.api_data_import import MaterializedPlaylist
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -152,5 +154,20 @@ def insert_playlists_tracks(playlist_dict):
     for track in tracks_to_add:
         r = PlaylistTrack(playlist_id=p.id, track_id=track.id)
         db.session.add(r)
+
+    db.session.commit()
+
+
+def refresh_all_playlist_metadata():
+    """For every playlist in the database, renews all the metadata fields from the Spotify API"""
+    for p in Playlist.query.all():
+        print(p.spotify_id)
+        mp = MaterializedPlaylist(p.spotify_id)
+        d = mp.get_data(include_tracks=False)
+        p.name = d["name"]
+        p.description = (d["description"],)
+        p.image_url = (d["image_url"],)
+        p.owner_name = (d["owner_name"],)
+        db.session.flush()
 
     db.session.commit()
