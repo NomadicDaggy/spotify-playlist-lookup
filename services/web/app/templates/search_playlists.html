@@ -16,10 +16,12 @@
 
     <div id="search-output">
         {% if results is iterable and (results is not string and results is not mapping) %}
-        {% for r in results %}
-        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ r }}?utm_source=generator"
-            width="100%" height="380" frameBorder="0" allowfullscreen=""
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        {% for p in results %}
+            {{ p.name }} {{ p.spotify_id }}
+         {# <iframe style="border-radius:12px"
+            src="https://open.spotify.com/embed/playlist/{{ r }}?utm_source=generator" width="100%" height="380"
+            frameBorder="0" allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe> #}
         {% endfor %}
         {% else %}
         {{ results }}

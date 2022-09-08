@@ -60,7 +60,7 @@ def search_playlists():
 
             # Find playlists that contain the track
             results = track.get_playlists()
-            results = [p.spotify_id for p in results]
+            results = [p for p in results]
 
         else:
             results = "Track not found, try again!"

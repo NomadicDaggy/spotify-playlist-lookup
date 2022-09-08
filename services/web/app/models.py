@@ -1,3 +1,4 @@
+from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
@@ -52,6 +53,10 @@ class Playlist(db.Model):
         server_default=db.func.now(),
         server_onupdate=db.func.now(),
     )
+    name = db.Column(db.String(100), nullable=False, server_default="")
+    description = db.Column(db.String(300), nullable=False, server_default="")
+    image_url = db.Column(db.String(100), nullable=True, server_default="")
+    owner_name = db.Column(db.String(100), nullable=False, server_default="")
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 
