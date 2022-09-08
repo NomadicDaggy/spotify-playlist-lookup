@@ -161,13 +161,15 @@ def insert_playlists_tracks(playlist_dict):
 def refresh_all_playlist_metadata():
     """For every playlist in the database, renews all the metadata fields from the Spotify API"""
     for p in Playlist.query.all():
-        print(p.spotify_id)
+
         mp = MaterializedPlaylist(p.spotify_id)
         d = mp.get_data(include_tracks=False)
+
         p.name = d["name"]
         p.description = (d["description"],)
         p.image_url = (d["image_url"],)
         p.owner_name = (d["owner_name"],)
+
         db.session.flush()
 
     db.session.commit()
