@@ -16,10 +16,24 @@
 
     <div id="search-output">
         {% if results is iterable and (results is not string and results is not mapping) %}
-        {% for r in results %}
-        <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ r }}?utm_source=generator"
+        {% for p in results %}
+        <a href="https://open.spotify.com/playlist/{{p.spotify_id}}" target="blank">
+            <div class="found-playlist-card">
+                <img src="{{ p.image_url }}" alt="image for {{ p.name }}">
+                <div>
+                    <h2 class="playlist-name">{{ p.name }}</h2>
+                    <span class="playlist-owner">{{ p.owner_name }}</span>
+                    <div class="playlist-description">{{ p.description }}</div>
+                </div>
+                <img class="spotify-logo"
+                    src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png"
+                    alt="spotify logo">
+            </div>
+        </a>
+
+        {# <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/{{ r }}?utm_source=generator"
             width="100%" height="380" frameBorder="0" allowfullscreen=""
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe> #}
         {% endfor %}
         {% else %}
         {{ results }}

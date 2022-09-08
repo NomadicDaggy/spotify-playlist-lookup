@@ -1,7 +1,10 @@
+from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+
+from app.api_data_import import MaterializedPlaylist
 
 
 db = SQLAlchemy()
@@ -52,6 +55,10 @@ class Playlist(db.Model):
         server_default=db.func.now(),
         server_onupdate=db.func.now(),
     )
+    name = db.Column(db.String(100), nullable=False, server_default="")
+    description = db.Column(db.String(300), nullable=False, server_default="")
+    image_url = db.Column(db.String(300), nullable=True, server_default="")
+    owner_name = db.Column(db.String(100), nullable=False, server_default="")
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 
@@ -103,7 +110,13 @@ def insert_playlists_tracks(playlist_dict):
     # Add playlist
     playlist_id = playlist_dict["id"]
     if Playlist.query.filter_by(spotify_id=playlist_id).count() == 0:
-        p = Playlist(spotify_id=playlist_id)
+        p = Playlist(
+            spotify_id=playlist_id,
+            name=playlist_dict["name"],
+            description=playlist_dict["description"],
+            image_url=playlist_dict["image_url"],
+            owner_name=playlist_dict["owner_name"],
+        )
         db.session.add(p)
         db.session.flush()
     else:
@@ -141,5 +154,22 @@ def insert_playlists_tracks(playlist_dict):
     for track in tracks_to_add:
         r = PlaylistTrack(playlist_id=p.id, track_id=track.id)
         db.session.add(r)
+
+    db.session.commit()
+
+
+def refresh_all_playlist_metadata():
+    """For every playlist in the database, renews all the metadata fields from the Spotify API"""
+    for p in Playlist.query.all():
+
+        mp = MaterializedPlaylist(p.spotify_id)
+        d = mp.get_data(include_tracks=False)
+
+        p.name = d["name"]
+        p.description = (d["description"],)
+        p.image_url = (d["image_url"],)
+        p.owner_name = (d["owner_name"],)
+
+        db.session.flush()
 
     db.session.commit()
