@@ -1,6 +1,6 @@
 from flask.cli import FlaskGroup
 
-from app.models import User, db, insert_playlists_tracks
+from app.models import User, db, insert_playlists_tracks, refresh_all_playlist_metadata
 from app.api_data_import import MaterializedPlaylist
 from app import create_app
 
@@ -23,6 +23,11 @@ def seed_db():
         mp = MaterializedPlaylist(i)
         playlist_data = mp.get_data()
         insert_playlists_tracks(playlist_data)
+
+
+@cli.command("refresh_playlists")
+def refresh_playlists():
+    refresh_all_playlist_metadata()
 
 
 if __name__ == "__main__":

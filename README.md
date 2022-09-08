@@ -55,4 +55,4 @@ You can connect to the dev database with `docker-compose exec db psql --username
 
 And see server logs with `docker-compose logs -f`
 
-New migration from `services/web` folder with `flask db migrate -m "reason for migration"`
+New migration with running dev container with `docker-compose exec web flask db migrate -m "reason for migration"`

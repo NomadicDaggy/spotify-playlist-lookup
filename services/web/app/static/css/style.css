@@ -113,9 +113,11 @@ input#submit { /*  search button  */
 input#submit:hover {
     background-color: #00BC96;
 }
+#track_name, textarea#track_link {
+    width: 300px;
+}
 textarea#track_link {
     height: 70px;
-    min-width: 300px;
 }
 
 textarea#playlist_ids {
@@ -145,4 +147,53 @@ textarea#playlist_ids {
     align-self: center;
     padding-bottom: 10px;
     text-align: center;
+}
+
+/* search playlists */
+#search-output {
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
+}
+.found-playlist-card {
+    width: 800px;
+    height: 200px;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--low-contrast-bg-color);
+    cursor: pointer;
+    border: 1px transparent;
+    border-radius: 15px;
+    position: relative;
+    color: var(--main-text-color);
+}
+.found-playlist-card img {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    object-position: center;
+    margin: 0;
+    border-radius: 15px;
+    border: 1px solid var(--low-contrast-bg-color);
+}
+.found-playlist-card div {
+    width: 400px;
+    padding-left: 30px;
+}
+.found-playlist-card .playlist-name {
+    font-size: 20px !important;
+    text-align: left !important;
+    margin-bottom: 10px !important;
+}
+.found-playlist-card .playlist-description {
+    margin-top: 20px;
+    color: #717499;
+}
+.found-playlist-card .spotify-logo {
+    height: 35px;
+    width: 35px;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
 }
