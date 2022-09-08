@@ -2,7 +2,7 @@
 
 Service, that allows lookup of Spotify playlists by songs that they contain. 
 
-Site available in BETA at https://dags.dev
+Site available in BETA at https://playlists.dags.dev
 
 Upstream: https://github.com/NomadicDaggy/flask-on-docker
 
@@ -15,6 +15,7 @@ Upstream: https://github.com/NomadicDaggy/flask-on-docker
 - [x] **App Factory** - enables setting up a separate app for each test.
 - [x] **Tests** - need the scaffolding and refactoring for testing to work at all.
 - [x] **Hot Reload** - make the dev app hot-reloadable for way easier front-end development.
+- [x] **Analytics** - add something like google analytics, but not that.
 - [ ] **RESTful API** - split out the api for playlist import/search and use it from the front-end #16.
 - [ ] **JSON Schema** - Add JSON Schema validation #17.
 - [ ] **Async** - currently the server can serve only 1 client at a time. So a large playlist import might block other users.
