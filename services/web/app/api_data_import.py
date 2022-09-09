@@ -26,7 +26,10 @@ class MaterializedPlaylist:
             p = self.spotify.playlist_items(
                 playlist_id=self.playlist_id, as_tracks=True, offset=offset
             )
-            tracks.extend(p["items"])
+            for t in p["items"]:
+                if t["track"]["id"] is not None:
+                    tracks.append(t)
+
             tracks_received = len(p["items"])
             offset += 100
 

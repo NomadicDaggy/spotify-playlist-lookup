@@ -184,6 +184,11 @@ def login_callback():
         db.session.add(user)
         db.session.commit()
 
+        user.spotify_token = token
+        user.import_all_playlists()
+    else:
+        user.spotify_token = token
+
     login_user(user, remember=True)
 
     next_page = url_for("route_blueprint.index")
