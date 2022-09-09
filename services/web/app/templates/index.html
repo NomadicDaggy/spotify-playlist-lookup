@@ -9,7 +9,7 @@
 </div>
 
 {% if current_user.is_anonymous %}
-<a href="{{ url_for('route_blueprint.spotify_login') }}">Login with Spotify</a>
+<a id="spotify-login-button" href="{{ url_for('route_blueprint.spotify_login') }}">Login with Spotify</a>
 {% else %}
 {% endif %}
 {% endblock %}
