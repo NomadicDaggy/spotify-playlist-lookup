@@ -6,6 +6,8 @@ from flask_migrate import Migrate
 
 from app.api_data_import import MaterializedPlaylist
 
+import tekore as tk
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -21,6 +23,8 @@ class User(UserMixin, db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
     generated = db.Column(db.Boolean(), default=True, nullable=False)
 
+    spotify_token = None
+
     def __repr__(self):
         return "<User {}>".format(self.username)
 
@@ -29,6 +33,23 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def import_all_playlists(self):
+
+        if not self.generated:
+            print("user not generated")
+            return
+
+        spotify_id = self.username
+        spotify = tk.Spotify()
+        with spotify.token_as(self.spotify_token):
+            print("getting user playlists")
+            user_playlists = spotify.playlists(spotify_id, limit=50)
+        for p in user_playlists.items:
+            print("inserting ", p.id)
+            mp = MaterializedPlaylist(p.id)
+            playlist_data = mp.get_data()
+            insert_playlists_tracks(playlist_data)
 
 
 class PlaylistTrack(db.Model):
