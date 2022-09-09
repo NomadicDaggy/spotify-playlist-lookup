@@ -23,7 +23,7 @@ route_blueprint = Blueprint("route_blueprint", __name__)
 conf = (
     os.getenv("SPOTIFY_CLIENT_ID"),
     os.getenv("SPOTIFY_CLIENT_SECRET"),
-    "http://localhost:1337/spotify_callback",
+    os.getenv("SPOTIFY_CALLBACK_URL"),
 )
 cred = tk.Credentials(*conf)
 spotify = tk.Spotify()
@@ -106,8 +106,8 @@ def import_playlists():
 
 @route_blueprint.route("/login", methods=["GET", "POST"])
 def login():
-    # disable for now
-    return redirect(url_for("route_blueprint.index"))
+    # # disable for now
+    # return redirect(url_for("route_blueprint.index"))
 
     if current_user.is_authenticated:
         return redirect(url_for("route_blueprint.index"))
