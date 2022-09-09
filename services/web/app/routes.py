@@ -155,7 +155,7 @@ def spotify_login():
     if current_user.is_authenticated:
         return redirect(url_for("route_blueprint.index"))
 
-    scope = tk.scope.every
+    scope = tk.scope.playlist_read_collaborative
     auth = tk.UserAuth(cred, scope)
     auths[auth.state] = auth
     return redirect(auth.url, 307)
