@@ -4,6 +4,7 @@ from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+from flask import session
 from app.api_data_import import MaterializedPlaylist
 
 import tekore as tk
@@ -23,8 +24,6 @@ class User(UserMixin, db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
     generated = db.Column(db.Boolean(), default=True, nullable=False)
 
-    spotify_token = None
-
     def __repr__(self):
         return "<User {}>".format(self.username)
 
@@ -41,8 +40,9 @@ class User(UserMixin, db.Model):
             return
 
         spotify_id = self.username
+        print("importing for ", spotify_id)
         spotify = tk.Spotify()
-        with spotify.token_as(self.spotify_token):
+        with spotify.token_as(session["spotify_token"]):
             print("getting user playlists")
             user_playlists = spotify.playlists(spotify_id, limit=50)
         for p in user_playlists.items:
