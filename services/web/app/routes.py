@@ -10,11 +10,17 @@ from flask import (
     session,
 )
 import tekore as tk
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import (
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+    LoginManager,
+)
 from werkzeug.urls import url_parse
 
 from app.forms import LoginForm, RegistrationForm, PlaylistInputForm, PlaylistSearchForm
-from app.models import User, db, insert_playlists_tracks, Track, Playlist
+from app.models import User, insert_playlists_tracks, Track, Playlist, db
 from app.api_data_import import MaterializedPlaylist
 
 import tasks
@@ -29,6 +35,15 @@ conf = (
 )
 cred = tk.Credentials(*conf)
 spotify = tk.Spotify()
+
+login_manager = LoginManager()
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
 
 auths = {}
 
