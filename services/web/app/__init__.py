@@ -1,10 +1,18 @@
-from distutils.log import debug
 import os
+import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 
 from app.models import db, migrate, User
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(asctime)s]: {} %(levelname)s %(message)s".format(os.getpid()),
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[logging.StreamHandler()],
+)
 
 
 def create_app():

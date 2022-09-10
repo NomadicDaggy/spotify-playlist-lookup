@@ -133,4 +133,3 @@ dmypy.json
 services/web/app/media/
 .env.spotify
 .vscode/settings.json
-.env.flower

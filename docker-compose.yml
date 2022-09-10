@@ -22,7 +22,9 @@ services:
     build: ./services/web
     command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A tasks.celery worker --loglevel=info
     environment:
-      - APP_ENV=development
+      - APP_ENV=Dev
+    env_file:
+      - ./.env.dev
     depends_on:
       - broker-rabbitmq
       - db
@@ -32,7 +34,9 @@ services:
     build: ./services/web
     command: celery -A tasks.celery beat --loglevel=info
     environment:
-      - APP_ENV=development
+      - APP_ENV=Dev
+    env_file:
+      - ./.env.dev
     depends_on:
       - broker-rabbitmq
       - db
