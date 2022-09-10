@@ -14,8 +14,22 @@ services:
     environment:
       - FLASK_DEBUG=1
     depends_on:
+      broker-rabbitmq:
+        condition: service_healthy
       db:
         condition: service_healthy
+  broker-rabbitmq:
+    image: "rabbitmq:3.9.22-management"
+    ports:
+      - "15673:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit_user
+      - RABBITMQ_DEFAULT_PASS=rabbit_password
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 2s
+      timeout: 30s
+      retries: 10
   db:
     image: postgres:13-alpine
     volumes:
