@@ -20,8 +20,9 @@ from flask_login import (
 from werkzeug.urls import url_parse
 
 from app.forms import LoginForm, RegistrationForm, PlaylistInputForm, PlaylistSearchForm
-from app.models import User, insert_playlists_tracks, Track, Playlist, db
+from app.models import User, insert_playlists_tracks, Track, Playlist
 from app.api_data_import import MaterializedPlaylist
+from app import db
 
 import tasks
 
