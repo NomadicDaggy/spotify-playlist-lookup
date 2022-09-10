@@ -18,6 +18,32 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+  api-worker01:
+    build: ./services/web
+    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A tasks.celery worker --loglevel=info
+    environment:
+      - APP_ENV=development
+    depends_on:
+      - broker-rabbitmq
+      - db
+    volumes:
+      - ./services/web/:/usr/src/app/
+  api-beat:
+    build: ./services/web
+    command: celery -A tasks.celery beat --loglevel=info
+    environment:
+      - APP_ENV=development
+    depends_on:
+      - broker-rabbitmq
+      - db
+  celery-flower:
+    image: gregsi/latest-celery-flower-docker:latest
+    env_file:
+      - ./.env.flower
+    ports:
+      - "5556:5555"
+    depends_on:
+      - broker-rabbitmq
   broker-rabbitmq:
     image: "rabbitmq:3.9.22-management"
     ports:
