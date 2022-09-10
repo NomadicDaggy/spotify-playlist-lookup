@@ -2,16 +2,13 @@ from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+
 
 from flask import session
 from app.api_data_import import MaterializedPlaylist
+from app import db
 
 import tekore as tk
-
-
-db = SQLAlchemy()
-migrate = Migrate()
 
 
 class User(UserMixin, db.Model):

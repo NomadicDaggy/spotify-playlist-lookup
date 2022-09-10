@@ -2,9 +2,8 @@ import os
 import logging
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 
-from app.models import db, migrate, User
+from flask_migrate import Migrate
 
 
 logging.basicConfig(
@@ -13,6 +12,9 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=[logging.StreamHandler()],
 )
+
+db = SQLAlchemy()
+migrate = Migrate()
 
 
 def create_app():
@@ -29,16 +31,11 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    from app.routes import route_blueprint
+    from app.routes import route_blueprint, login_manager
 
     app.register_blueprint(route_blueprint)
 
-    login = LoginManager(app)
-    login.login_view = "login"
-
-    @login.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
+    login_manager.init_app(app)
 
     @app.shell_context_processor
     def shell_context():
