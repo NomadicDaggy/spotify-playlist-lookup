@@ -30,7 +30,7 @@ class MaterializedPlaylist:
                 playlist_id=self.playlist_id, as_tracks=True, offset=offset
             )
             for t in p["items"]:
-                if t["track"]["id"] is not None:
+                if t["track"] is not None and t["track"]["id"] is not None:
                     tracks.append(t)
 
             tracks_received = len(p["items"])
