@@ -175,7 +175,10 @@ def spotify_login():
 
     scope = tk.scope.playlist_read_collaborative
     auth = tk.UserAuth(cred, scope)
+
+    # TODO: wonder how this is going to work with multiple users...
     auths[auth.state] = auth
+
     return redirect(auth.url, 307)
 
 
@@ -201,8 +204,10 @@ def login_callback():
 
     print("user searched")
     # new user
+    new_user = False
     if user is None:
         print("creating new user")
+        new_user = True
         user = User(
             username=u.id,
             email="",
@@ -218,11 +223,9 @@ def login_callback():
     user.spotify_refresh_token = token.refresh_token
     db.session.commit()
 
-    # need this only on first-sign-in probably
-    tasks.process_data.delay(user.id)
-    # user.import_all_playlists()
-    # else:
-    # user.spotify_token = token
+    if new_user:
+        # need this only on first-sign-in probably
+        tasks.process_data.delay(user.id)
 
     print("logging in")
     login_user(user, remember=True)

@@ -46,7 +46,7 @@ services:
   celery-flower:
     image: gregsi/latest-celery-flower-docker:latest
     env_file:
-      - ./.env.flower
+      - ./.env.flower.prod
     ports:
       - "5556:5555"
     depends_on:
@@ -55,9 +55,8 @@ services:
     image: "rabbitmq:3.9.22-management"
     ports:
       - "15673:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=rabbit_user
-      - RABBITMQ_DEFAULT_PASS=rabbit_password
+    env_file:
+      - ./.env.prod
     healthcheck:
       test: rabbitmq-diagnostics -q ping
       interval: 2s
