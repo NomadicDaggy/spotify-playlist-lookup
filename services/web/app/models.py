@@ -41,8 +41,9 @@ class User(UserMixin, db.Model):
             print("user not generated")
             return
 
-        spotify_id = self.username
-        print("importing for ", spotify_id)
+        spotify_user_id = self.username
+        print("importing for ", spotify_user_id)
+
         spotify = tk.Spotify()
         now = time.time()
         token = tk.Token(
@@ -55,13 +56,31 @@ class User(UserMixin, db.Model):
             },
             uses_pkce=False,
         )
+
+        # gets user playlist ids with user token
         with spotify.token_as(token):
             print("getting user playlists")
-            user_playlists = spotify.playlists(spotify_id, limit=50)
-        for p in user_playlists.items:
-            # print("inserting ", p.id)
+            playlists_received = 50
+            offset = 0
+            all_user_playlists = []
+            while playlists_received == 50:
+                playlists = spotify.playlists(spotify_user_id, limit=50, offset=offset)
+                playlist_list = list(playlists.items)
+                playlists_received = len(playlist_list)
+                all_user_playlists.extend(playlist_list)
+                offset += 50
+
+        # gets playlist tracks without user token (so if playlist is hidden after all,
+        # there is an access error and it stays private)
+        for p in all_user_playlists:
+            print(f"inserting {p.id}")
             mp = MaterializedPlaylist(p.id)
-            playlist_data = mp.get_data()
+            try:
+                playlist_data = mp.get_data()
+            except (tk.NotFound, tk.ServiceUnavailable) as e:
+                print(e)
+                continue
+
             insert_playlists_tracks(playlist_data)
 
 
@@ -91,7 +110,7 @@ class Playlist(db.Model):
         server_onupdate=db.func.now(),
     )
     name = db.Column(db.String(100), nullable=False, server_default="")
-    description = db.Column(db.String(300), nullable=False, server_default="")
+    description = db.Column(db.String(1000), nullable=False, server_default="")
     image_url = db.Column(db.String(300), nullable=True, server_default="")
     owner_name = db.Column(db.String(100), nullable=False, server_default="")
 

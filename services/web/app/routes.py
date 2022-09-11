@@ -173,7 +173,7 @@ def spotify_login():
     if current_user.is_authenticated:
         return redirect(url_for("route_blueprint.index"))
 
-    scope = tk.scope.playlist_read_collaborative
+    scope = [tk.scope.playlist_read_collaborative, tk.scope.playlist_read_private]
     auth = tk.UserAuth(cred, scope)
 
     # TODO: wonder how this is going to work with multiple users...
