@@ -15,8 +15,54 @@ services:
       - ./.env.spotify
       - ./.env.prod.db
     depends_on:
+      broker-rabbitmq:
+        condition: service_healthy
       db:
         condition: service_healthy
+  api-worker01:
+    build: ./services/web
+    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info
+    environment:
+      - APP_ENV=Prod
+    env_file:
+      - ./.env.prod
+      - ./.env.spotify
+      - ./.env.prod.db
+    depends_on:
+      - broker-rabbitmq
+      - db
+    volumes:
+      - ./services/web/:/usr/src/app/
+  api-beat:
+    build: ./services/web
+    command: celery -A tasks.celery beat --loglevel=info
+    environment:
+      - APP_ENV=Prod
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - broker-rabbitmq
+      - db
+  celery-flower:
+    image: gregsi/latest-celery-flower-docker:latest
+    env_file:
+      - ./.env.flower
+    ports:
+      - "5556:5555"
+    depends_on:
+      - broker-rabbitmq
+  broker-rabbitmq:
+    image: "rabbitmq:3.9.22-management"
+    ports:
+      - "15673:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=rabbit_user
+      - RABBITMQ_DEFAULT_PASS=rabbit_password
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 2s
+      timeout: 30s
+      retries: 10
   db:
     image: postgres:13-alpine
     volumes:

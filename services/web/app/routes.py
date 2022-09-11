@@ -218,7 +218,8 @@ def login_callback():
     user.spotify_refresh_token = token.refresh_token
     db.session.commit()
 
-    task = tasks.process_data.delay(user.id)
+    # need this only on first-sign-in probably
+    tasks.process_data.delay(user.id)
     # user.import_all_playlists()
     # else:
     # user.spotify_token = token
