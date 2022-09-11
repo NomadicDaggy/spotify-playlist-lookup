@@ -22,7 +22,7 @@ from werkzeug.urls import url_parse
 from app.forms import LoginForm, RegistrationForm, PlaylistInputForm, PlaylistSearchForm
 from app.models import User, insert_playlists_tracks, Track, Playlist
 from app.api_data_import import MaterializedPlaylist
-from app import db
+from extensions import db
 
 import tasks
 
@@ -199,6 +199,7 @@ def login_callback():
     user = User.query.filter_by(username=u.id).first()
 
     print("user searched")
+    # new user
     if user is None:
         print("creating new user")
         user = User(

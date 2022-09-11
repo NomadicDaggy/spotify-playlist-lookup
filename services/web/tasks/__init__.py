@@ -1,24 +1,31 @@
 import logging
 import os
+import time
 
-from celery import Celery, current_app
+from extensions import celery
+
+# from flask import current_app
+
+# from celery import Celery, current_app
 
 from app.models import User
 
 LOGGER = logging.getLogger()
 
 
-def make_celery():
-    celery = Celery(
-        __name__,
-        broker=os.getenv("CELERY_BROKER"),
-        backend=os.getenv("CELERY_RESULT_BACKEND"),
-    )
+# def make_celery():
+#     celery = Celery(
+#         __name__,
+#         broker=os.getenv("CELERY_BROKER"),
+#         backend=os.getenv("CELERY_RESULT_BACKEND"),
+#     )
 
-    return celery
+#     return celery
 
 
-celery = make_celery()
+# celery = make_celery()
+
+# celery = Celery()
 
 
 @celery.task
