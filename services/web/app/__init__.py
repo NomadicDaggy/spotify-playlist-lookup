@@ -1,10 +1,16 @@
-from distutils.log import debug
 import os
+import logging
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 
-from app.models import db, migrate, User
+from extensions import db, migrate, celery
+
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="[%(asctime)s]: {} %(levelname)s %(message)s".format(os.getpid()),
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[logging.StreamHandler()],
+)
 
 
 def create_app():
@@ -20,20 +26,32 @@ def create_app():
 
     db.init_app(app)
     migrate.init_app(app, db)
+    init_celery(app)
 
-    from app.routes import route_blueprint
+    from app.routes import route_blueprint, login_manager
 
     app.register_blueprint(route_blueprint)
 
-    login = LoginManager(app)
-    login.login_view = "login"
-
-    @login.user_loader
-    def load_user(id):
-        return User.query.get(int(id))
+    login_manager.init_app(app)
 
     @app.shell_context_processor
     def shell_context():
         return {"app": app, "db": db}
 
+    app.app_context().push
     return app
+
+
+def init_celery(app=None):
+    app = app or create_app()
+    celery.conf.update(app.config.get("CELERY", {}))
+
+    class ContextTask(celery.Task):
+        """Make celery tasks work with Flask app context"""
+
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery

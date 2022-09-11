@@ -10,12 +10,21 @@ from flask import (
     session,
 )
 import tekore as tk
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import (
+    current_user,
+    login_required,
+    login_user,
+    logout_user,
+    LoginManager,
+)
 from werkzeug.urls import url_parse
 
 from app.forms import LoginForm, RegistrationForm, PlaylistInputForm, PlaylistSearchForm
-from app.models import User, db, insert_playlists_tracks, Track, Playlist
+from app.models import User, insert_playlists_tracks, Track, Playlist
 from app.api_data_import import MaterializedPlaylist
+from extensions import db
+
+import tasks
 
 
 route_blueprint = Blueprint("route_blueprint", __name__)
@@ -27,6 +36,15 @@ conf = (
 )
 cred = tk.Credentials(*conf)
 spotify = tk.Spotify()
+
+login_manager = LoginManager()
+login_manager.login_view = "login"
+
+
+@login_manager.user_loader
+def load_user(id):
+    return User.query.get(int(id))
+
 
 auths = {}
 
@@ -171,26 +189,44 @@ def login_callback():
         return "Invalid state!", 400
 
     token = auth.request_token(code, state)
+
+    session["spotify_token"] = token.access_token
     with spotify.token_as(token):
         u = spotify.current_user()
         print(u)
 
+    print("TOKEN", session["spotify_token"])
+
     user = User.query.filter_by(username=u.id).first()
+
+    print("user searched")
+    # new user
     if user is None:
         print("creating new user")
         user = User(
-            username=u.id, email="", password_hash="", active=True, generated=True
+            username=u.id,
+            email="",
+            password_hash="",
+            active=True,
+            generated=True,
         )
         db.session.add(user)
         db.session.commit()
 
-        user.spotify_token = token
-        user.import_all_playlists()
-    else:
-        user.spotify_token = token
+    user.spotify_token = token.access_token
+    user.spotify_token_expires_at = token.expires_at
+    user.spotify_refresh_token = token.refresh_token
+    db.session.commit()
 
+    task = tasks.process_data.delay(user.id)
+    # user.import_all_playlists()
+    # else:
+    # user.spotify_token = token
+
+    print("logging in")
     login_user(user, remember=True)
 
     next_page = url_for("route_blueprint.index")
 
+    print("returning")
     return redirect(next_page)

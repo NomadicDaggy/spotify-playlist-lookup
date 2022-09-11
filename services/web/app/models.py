@@ -1,16 +1,15 @@
+import time
+
 from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
+from flask import session
 from app.api_data_import import MaterializedPlaylist
+from extensions import db
 
 import tekore as tk
-
-
-db = SQLAlchemy()
-migrate = Migrate()
 
 
 class User(UserMixin, db.Model):
@@ -23,7 +22,9 @@ class User(UserMixin, db.Model):
     active = db.Column(db.Boolean(), default=True, nullable=False)
     generated = db.Column(db.Boolean(), default=True, nullable=False)
 
-    spotify_token = None
+    spotify_token = db.Column(db.String(300), nullable=True)
+    spotify_token_expires_at = db.Column(db.Integer, nullable=True)
+    spotify_refresh_token = db.Column(db.String(300), nullable=True)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -41,8 +42,20 @@ class User(UserMixin, db.Model):
             return
 
         spotify_id = self.username
+        print("importing for ", spotify_id)
         spotify = tk.Spotify()
-        with spotify.token_as(self.spotify_token):
+        now = time.time()
+        token = tk.Token(
+            {
+                "access_token": self.spotify_token,
+                "expires_at": self.spotify_token_expires_at,
+                "refresh_token": self.spotify_refresh_token,
+                "token_type": "Bearer",
+                "expires_in": self.spotify_token_expires_at - now,
+            },
+            uses_pkce=False,
+        )
+        with spotify.token_as(token):
             print("getting user playlists")
             user_playlists = spotify.playlists(spotify_id, limit=50)
         for p in user_playlists.items:
