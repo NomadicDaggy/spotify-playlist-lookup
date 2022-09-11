@@ -59,7 +59,7 @@ class User(UserMixin, db.Model):
             print("getting user playlists")
             user_playlists = spotify.playlists(spotify_id, limit=50)
         for p in user_playlists.items:
-            print("inserting ", p.id)
+            # print("inserting ", p.id)
             mp = MaterializedPlaylist(p.id)
             playlist_data = mp.get_data()
             insert_playlists_tracks(playlist_data)
