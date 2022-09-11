@@ -25,6 +25,7 @@ services:
       - APP_ENV=Dev
     env_file:
       - ./.env.dev
+      - ./.env.spotify
     depends_on:
       - broker-rabbitmq
       - db

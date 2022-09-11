@@ -189,6 +189,7 @@ def login_callback():
         return "Invalid state!", 400
 
     token = auth.request_token(code, state)
+
     session["spotify_token"] = token.access_token
     with spotify.token_as(token):
         u = spotify.current_user()
@@ -211,6 +212,11 @@ def login_callback():
         )
         db.session.add(user)
         db.session.commit()
+
+    user.spotify_token = token.access_token
+    user.spotify_token_expires_at = token.expires_at
+    user.spotify_refresh_token = token.refresh_token
+    db.session.commit()
 
     task = tasks.process_data.delay(user.id)
     # user.import_all_playlists()
