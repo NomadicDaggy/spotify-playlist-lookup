@@ -7,4 +7,9 @@
 <div id="homepage-stats">
     Currently we keep track of <b>{{ playlist_count }}</b> Spotify playlists and <b>{{ track_count }}</b> tracks
 </div>
+
+{% if current_user.is_anonymous %}
+<a id="spotify-login-button" href="{{ url_for('route_blueprint.spotify_login') }}">Login with Spotify</a>
+{% else %}
+{% endif %}
 {% endblock %}

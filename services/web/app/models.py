@@ -1,14 +1,15 @@
+import time
+
 from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
 
+from flask import session
 from app.api_data_import import MaterializedPlaylist
+from extensions import db
 
-
-db = SQLAlchemy()
-migrate = Migrate()
+import tekore as tk
 
 
 class User(UserMixin, db.Model):
@@ -19,6 +20,11 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     active = db.Column(db.Boolean(), default=True, nullable=False)
+    generated = db.Column(db.Boolean(), default=True, nullable=False)
+
+    spotify_token = db.Column(db.String(300), nullable=True)
+    spotify_token_expires_at = db.Column(db.Integer, nullable=True)
+    spotify_refresh_token = db.Column(db.String(300), nullable=True)
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -28,6 +34,54 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def import_all_playlists(self):
+
+        if not self.generated:
+            print("user not generated")
+            return
+
+        spotify_user_id = self.username
+        print("importing for ", spotify_user_id)
+
+        spotify = tk.Spotify()
+        now = time.time()
+        token = tk.Token(
+            {
+                "access_token": self.spotify_token,
+                "expires_at": self.spotify_token_expires_at,
+                "refresh_token": self.spotify_refresh_token,
+                "token_type": "Bearer",
+                "expires_in": self.spotify_token_expires_at - now,
+            },
+            uses_pkce=False,
+        )
+
+        # gets user playlist ids with user token
+        with spotify.token_as(token):
+            print("getting user playlists")
+            playlists_received = 50
+            offset = 0
+            all_user_playlists = []
+            while playlists_received == 50:
+                playlists = spotify.playlists(spotify_user_id, limit=50, offset=offset)
+                playlist_list = list(playlists.items)
+                playlists_received = len(playlist_list)
+                all_user_playlists.extend(playlist_list)
+                offset += 50
+
+        # gets playlist tracks without user token (so if playlist is hidden after all,
+        # there is an access error and it stays private)
+        for p in all_user_playlists:
+            print(f"inserting {p.id}")
+            mp = MaterializedPlaylist(p.id)
+            try:
+                playlist_data = mp.get_data()
+            except (tk.NotFound, tk.ServiceUnavailable) as e:
+                print(e)
+                continue
+
+            insert_playlists_tracks(playlist_data)
 
 
 class PlaylistTrack(db.Model):
@@ -56,7 +110,7 @@ class Playlist(db.Model):
         server_onupdate=db.func.now(),
     )
     name = db.Column(db.String(100), nullable=False, server_default="")
-    description = db.Column(db.String(300), nullable=False, server_default="")
+    description = db.Column(db.String(1000), nullable=False, server_default="")
     image_url = db.Column(db.String(300), nullable=True, server_default="")
     owner_name = db.Column(db.String(100), nullable=False, server_default="")
 

@@ -1,8 +1,9 @@
 from flask.cli import FlaskGroup
 
-from app.models import User, db, insert_playlists_tracks, refresh_all_playlist_metadata
+from app.models import User, insert_playlists_tracks, refresh_all_playlist_metadata
 from app.api_data_import import MaterializedPlaylist
 from app import create_app
+from extensions import db
 
 
 app = create_app()

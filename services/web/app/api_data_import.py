@@ -1,4 +1,5 @@
 import os
+import httpx
 
 import tekore as tk
 from dotenv import load_dotenv
@@ -11,8 +12,14 @@ class MaterializedPlaylist:
         self.client_id = os.getenv("SPOTIFY_CLIENT_ID")
         self.client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
+        # print(self.client_id, self.client_secret)
+        # print(os.environ)
+
         self.token = tk.request_client_token(self.client_id, self.client_secret)
-        self.spotify = tk.Spotify(self.token)
+
+        big_timeout_client = httpx.Client(timeout=60.0)
+        big_timeout_sender = tk.SyncSender(big_timeout_client)
+        self.spotify = tk.Spotify(self.token, sender=big_timeout_sender)
 
         self.playlist_id = playlist_id
 
@@ -26,7 +33,10 @@ class MaterializedPlaylist:
             p = self.spotify.playlist_items(
                 playlist_id=self.playlist_id, as_tracks=True, offset=offset
             )
-            tracks.extend(p["items"])
+            for t in p["items"]:
+                if t["track"] is not None and t["track"]["id"] is not None:
+                    tracks.append(t)
+
             tracks_received = len(p["items"])
             offset += 100
 

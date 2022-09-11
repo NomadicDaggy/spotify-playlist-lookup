@@ -62,6 +62,23 @@ body {
     padding-right: 30px;
 }
 
+#spotify-login-button {
+    margin: auto;
+    display: block;
+    width: fit-content;
+    margin-top: 30px;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    border: 1px transparent;
+    border-radius: 25px;
+    background-color: var(--secondary-text-color);
+    color: white;
+    padding: 7px 20px;
+
+}
+
 
 #main-content {
     align-self: center;
@@ -154,6 +171,7 @@ textarea#playlist_ids {
     display: flex;
     flex-direction: column;
     margin-top: 100px;
+    row-gap: 20px;
 }
 .found-playlist-card {
     width: 800px;
@@ -162,7 +180,7 @@ textarea#playlist_ids {
     flex-direction: row;
     background-color: var(--low-contrast-bg-color);
     cursor: pointer;
-    border: 1px transparent;
+    border: 0px transparent;
     border-radius: 15px;
     position: relative;
     color: var(--main-text-color);
@@ -175,7 +193,7 @@ textarea#playlist_ids {
     object-position: center;
     margin: 0;
     border-radius: 15px;
-    border: 1px solid var(--low-contrast-bg-color);
+    border: 0px transparent;
 }
 .found-playlist-card div {
     width: 400px;
