@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 from flask import session
 from app.api_data_import import MaterializedPlaylist
-from app import db
+from extensions import db
 
 import tekore as tk
 
@@ -39,6 +39,7 @@ class User(UserMixin, db.Model):
         spotify_id = self.username
         print("importing for ", spotify_id)
         spotify = tk.Spotify()
+        print(session["spotify_token"])
         with spotify.token_as(session["spotify_token"]):
             print("getting user playlists")
             user_playlists = spotify.playlists(spotify_id, limit=50)

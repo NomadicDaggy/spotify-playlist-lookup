@@ -18,8 +18,8 @@ class Config(object):
     SPOTIFY_CLIENT_SECRET = os.getenv("SPOTIFY_CLIENT_SECRET")
     SPOTIFY_REDIRECT_URI = os.getenv("SPOTIFY_REDIRECT_URI")
 
-    CELERY_BROKER = os.getenv("CELERY_BROKER")
-    CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
+    CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
+    CELERY_BACKEND_URL = os.getenv("CELERY_BACKEND_URL")
 
 
 class ProductionConfig(Config):

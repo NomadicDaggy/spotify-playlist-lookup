@@ -20,7 +20,7 @@ services:
         condition: service_healthy
   api-worker01:
     build: ./services/web
-    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A tasks.celery worker --loglevel=info
+    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info
     environment:
       - APP_ENV=Dev
     env_file:
