@@ -1,11 +1,8 @@
 import time
 
-from email.policy import default
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from flask_sqlalchemy import SQLAlchemy
 
-from flask import session
 from app.api_data_import import MaterializedPlaylist
 from extensions import db
 
