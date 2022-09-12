@@ -7,7 +7,6 @@ from flask import (
     request,
     url_for,
     Blueprint,
-    session,
 )
 import tekore as tk
 from flask_login import (
@@ -20,8 +19,7 @@ from flask_login import (
 from werkzeug.urls import url_parse
 
 from app.forms import LoginForm, RegistrationForm, PlaylistInputForm, PlaylistSearchForm
-from app.models import User, insert_playlists_tracks, Track, Playlist
-from app.api_data_import import MaterializedPlaylist
+from app.models import User, Track, Playlist
 from extensions import db
 
 import tasks
@@ -108,25 +106,14 @@ def search_playlists():
 def import_playlists():
     form = PlaylistInputForm()
     if form.validate_on_submit():
-        # TODO: Should this block be abstracted out to somewhere else?
-        #
-        # get each playlist id
         playlist_ids = form.playlist_ids.data.split(",")
-        for p in playlist_ids:
-            mp = MaterializedPlaylist(p)
-            # get track data from spotify api
-            playlist_data = mp.get_data()
-            # insert into database
-            insert_playlists_tracks(playlist_data)
+        tasks.process_data.delay(playlist_ids)
 
     return render_template("import_playlists.html", title="Import Playlists", form=form)
 
 
 @route_blueprint.route("/login", methods=["GET", "POST"])
 def login():
-    # # disable for now
-    # return redirect(url_for("route_blueprint.index"))
-
     if current_user.is_authenticated:
         return redirect(url_for("route_blueprint.index"))
     form = LoginForm()
@@ -152,9 +139,6 @@ def logout():
 
 @route_blueprint.route("/register", methods=["GET", "POST"])
 def register():
-    # disable for now
-    return redirect(url_for("route_blueprint.index"))
-
     if current_user.is_authenticated:
         return redirect(url_for("route_blueprint.index"))
     form = RegistrationForm()
@@ -166,71 +150,3 @@ def register():
         flash("Congratulation, you are now a registered user!")
         return redirect(url_for("route_blueprint.login"))
     return render_template("register.html", title="Register", form=form)
-
-
-@route_blueprint.route("/spotify_login", methods=["GET"])
-def spotify_login():
-    if current_user.is_authenticated:
-        return redirect(url_for("route_blueprint.index"))
-
-    scope = [tk.scope.playlist_read_collaborative, tk.scope.playlist_read_private]
-    auth = tk.UserAuth(cred, scope)
-
-    # TODO: wonder how this is going to work with multiple users...
-    auths[auth.state] = auth
-
-    return redirect(auth.url, 307)
-
-
-@route_blueprint.route("/spotify_callback", methods=["GET"])
-def login_callback():
-    code = request.args.get("code", None)
-    state = request.args.get("state", None)
-    auth = auths.pop(state, None)
-
-    if auth is None:
-        return "Invalid state!", 400
-
-    token = auth.request_token(code, state)
-
-    session["spotify_token"] = token.access_token
-    with spotify.token_as(token):
-        u = spotify.current_user()
-        print(u)
-
-    print("TOKEN", session["spotify_token"])
-
-    user = User.query.filter_by(username=u.id).first()
-
-    print("user searched")
-    # new user
-    new_user = False
-    if user is None:
-        print("creating new user")
-        new_user = True
-        user = User(
-            username=u.id,
-            email="",
-            password_hash="",
-            active=True,
-            generated=True,
-        )
-        db.session.add(user)
-        db.session.commit()
-
-    user.spotify_token = token.access_token
-    user.spotify_token_expires_at = token.expires_at
-    user.spotify_refresh_token = token.refresh_token
-    db.session.commit()
-
-    if new_user:
-        # need this only on first-sign-in probably
-        tasks.process_data.delay(user.id)
-
-    print("logging in")
-    login_user(user, remember=True)
-
-    next_page = url_for("route_blueprint.index")
-
-    print("returning")
-    return redirect(next_page)

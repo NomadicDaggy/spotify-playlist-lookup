@@ -1,35 +1,20 @@
 import logging
-import os
-import time
 
 from extensions import celery
 
-# from flask import current_app
+from app.models import insert_playlists_tracks
+from app.api_data_import import MaterializedPlaylist
 
-# from celery import Celery, current_app
-
-from app.models import User
 
 LOGGER = logging.getLogger()
 
 
-# def make_celery():
-#     celery = Celery(
-#         __name__,
-#         broker=os.getenv("CELERY_BROKER"),
-#         backend=os.getenv("CELERY_RESULT_BACKEND"),
-#     )
-
-#     return celery
-
-
-# celery = make_celery()
-
-# celery = Celery()
-
-
 @celery.task
-def process_data(user_id):
+def process_data(playlist_ids):
     LOGGER.info("Processing data")
-    user = User.query.filter_by(id=user_id).first()
-    user.import_all_playlists()
+    for p in playlist_ids:
+        mp = MaterializedPlaylist(p)
+        # get track data from spotify api
+        playlist_data = mp.get_data()
+        # insert into database
+        insert_playlists_tracks(playlist_data)
