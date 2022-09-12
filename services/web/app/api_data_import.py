@@ -12,9 +12,6 @@ class MaterializedPlaylist:
         self.client_id = os.getenv("SPOTIFY_CLIENT_ID")
         self.client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-        # print(self.client_id, self.client_secret)
-        # print(os.environ)
-
         self.token = tk.request_client_token(self.client_id, self.client_secret)
 
         big_timeout_client = httpx.Client(timeout=60.0)
