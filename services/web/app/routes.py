@@ -147,6 +147,5 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash("Congratulation, you are now a registered user!")
         return redirect(url_for("route_blueprint.login"))
     return render_template("register.html", title="Register", form=form)

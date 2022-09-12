@@ -215,3 +215,122 @@ textarea#playlist_ids {
     right: 10px;
     bottom: 10px;
 }
+
+@media only screen and (max-width: 800px) {
+
+    #left-links {
+        align-items: flex-start;
+    }
+    #left-links > a {
+        margin: 0;
+        font-size: 14px;
+        max-width: 60px;
+    }
+    #gh-logo {
+        display: none;
+    }
+
+    #main-content.index {
+        padding: 0 10px;
+    }
+    .login input, .register input {
+        max-width: 160px;
+    }
+    .login form, .register form {
+        margin: 0 !important;
+    }
+    .login #submit, .register #submit {
+        margin: 0 auto !important;
+    }
+    #main-content {
+        font-size: 14px;
+        padding: 0px
+        text-align: center;
+    }
+    #main-content form {
+        max-width: 80%;
+        margin: auto;
+    }
+    #main-content h2 {
+        font-size: 20px;
+    }
+    #inline-logo {
+        font-size: 20px;
+    }
+    #search-fields label {
+        max-width: 30%;
+        text-align: left;
+    }
+    #track_name, textarea#track_link {
+        width: unset;
+    }
+    input#submit {
+        font-size: 18px !important;
+    }
+    #search-output {
+        margin-top: 50px;
+    }
+    .found-playlist-card img {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+        margin: 10px 0 0 10px;
+    }
+    .found-playlist-card  {
+        width: 300px;
+        height: 150px;
+        border-radius: 10px;
+    }
+    .found-playlist-card div {
+        width: 230px;
+        padding: 0 0 0 10px;
+        margin: 0;
+        border: none;
+    }
+    .found-playlist-card .playlist-name {
+        font-size: 14px !important;
+        padding: 10px 0 0 0;
+        margin-bottom: unset !important;
+        min-height: 50px;
+        margin: 0;
+    }
+    .found-playlist-card .playlist-owner {
+        font-size: 12px !important;
+        padding:0;
+        margin:0;
+    }
+    .found-playlist-card .playlist-description {
+        font-size: 12px !important;
+        padding:0;
+        margin:0;
+    }
+    .found-playlist-card .spotify-logo {
+        width: 20px;
+        height: 20px;
+        right: unset;
+        left: 0;
+        border: none;
+        border-radius: unset;
+    }
+    #main-content.import_playlists {
+        width: 100%;
+    }
+    #main-content.import_playlists p {
+        display: block;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    textarea#playlist_ids {
+        max-width: 300px;
+        width: 100%;
+        height: 100px;
+        margin: auto;
+        min-width: unset;
+        min-height: unset;
+    }
+
+    #footer {
+        font-size: 12px;
+        padding: 10px;
+    }
+}
