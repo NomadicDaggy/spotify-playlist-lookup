@@ -34,6 +34,10 @@ def create_app():
 
     login_manager.init_app(app)
 
+    login_manager.blueprint_login_views = {
+        "route_blueprint": "/login",
+    }
+
     @app.shell_context_processor
     def shell_context():
         return {"app": app, "db": db}
