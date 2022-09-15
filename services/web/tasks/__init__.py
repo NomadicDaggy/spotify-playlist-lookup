@@ -44,6 +44,7 @@ def process_data(playlist_ids):
             tk.ServiceUnavailable,
             sq.exc.DataError,
             psycopg2.errors.UniqueViolation,
+            psycopg2.errors.StringDataRightTruncation,
         ) as e:
             print(e)
             continue
