@@ -77,7 +77,7 @@ def search_playlists():
     form = PlaylistSearchForm()
     if form.validate_on_submit():
         if link := form.track_link.data:
-            track_id = link.split("/")[-1]
+            track_id = link.split("/")[-1].split("?")[0]
             track = Track.query.filter_by(spotify_id=track_id).first()
         else:
             track = Track.query.filter_by(name=form.track_name.data).first()
