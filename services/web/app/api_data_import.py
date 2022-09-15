@@ -45,7 +45,7 @@ class MaterializedPlaylist:
 
         return {
             "id": track_api_dict["track"]["id"],
-            "name": track_api_dict["track"]["name"],
+            "name": track_api_dict["track"]["name"][:200],
         }
 
     def get_data(self, include_tracks=True) -> dict:
@@ -56,14 +56,14 @@ class MaterializedPlaylist:
 
         self.data = {
             "id": self.playlist_id,
-            "name": p["name"],
-            "description": p["description"],
-            "owner_name": p["owner"]["display_name"],
+            "name": p["name"][:100],
+            "description": p["description"][:1000],
+            "owner_name": p["owner"]["display_name"][:100],
         }
 
         self.data["image_url"] = ""
         if len(p["images"]) > 0:
-            self.data["image_url"] = p["images"][0]["url"]
+            self.data["image_url"] = p["images"][0]["url"][:300]
 
         if include_tracks:
             self.data["tracks"] = [
