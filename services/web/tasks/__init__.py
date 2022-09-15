@@ -6,6 +6,7 @@ from extensions import celery
 
 import tekore as tk
 import sqlalchemy as sq
+import psycopg2
 
 from app.models import insert_playlists_tracks, Playlist
 from app.api_data_import import MaterializedPlaylist
@@ -38,7 +39,12 @@ def process_data(playlist_ids):
         # get track data from spotify api
         try:
             playlist_data = mp.get_data()
-        except (tk.NotFound, tk.ServiceUnavailable, sq.exc.DataError) as e:
+        except (
+            tk.NotFound,
+            tk.ServiceUnavailable,
+            sq.exc.DataError,
+            psycopg2.errors.UniqueViolation,
+        ) as e:
             print(e)
             continue
 
