@@ -6,17 +6,19 @@ from dotenv import load_dotenv
 
 
 class MaterializedPlaylist:
-    def __init__(self, playlist_id: str) -> None:
+    def __init__(self, playlist_id: str, spotify=None) -> None:
 
-        # TODO: this should probably be done elsewhere and not on every call
-        self.client_id = os.getenv("SPOTIFY_CLIENT_ID")
-        self.client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
+        if spotify is None:
+            client_id = os.getenv("SPOTIFY_CLIENT_ID")
+            client_secret = os.getenv("SPOTIFY_CLIENT_SECRET")
 
-        self.token = tk.request_client_token(self.client_id, self.client_secret)
+            token = tk.request_client_token(client_id, client_secret)
 
-        big_timeout_client = httpx.Client(timeout=60.0)
-        big_timeout_sender = tk.SyncSender(big_timeout_client)
-        self.spotify = tk.Spotify(self.token, sender=big_timeout_sender)
+            big_timeout_client = httpx.Client(timeout=60.0)
+            big_timeout_sender = tk.SyncSender(big_timeout_client)
+            self.spotify = tk.Spotify(token, sender=big_timeout_sender)
+        else:
+            self.spotify = spotify
 
         self.playlist_id = playlist_id
 

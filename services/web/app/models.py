@@ -1,4 +1,5 @@
 import time
+import logging
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -7,6 +8,9 @@ from app.api_data_import import MaterializedPlaylist
 from extensions import db
 
 import tekore as tk
+
+
+LOGGER = logging.getLogger()
 
 
 class User(UserMixin, db.Model):
@@ -144,7 +148,7 @@ class Track(db.Model):
 # or something like that. ...But then you would have to specify the dict many times, so rather
 # better would be a class for the playlist object from the api, so like ApiPlaylist.insert_all()
 # But I still don't like the coupling between the API data and the database model...
-def insert_playlists_tracks(playlist_dict):
+def insert_playlists_tracks(playlist_dict, return_on_duplicate=True):
     """Inserts a playlist with tracks in the database
 
     Example Input:
@@ -171,6 +175,12 @@ def insert_playlists_tracks(playlist_dict):
         db.session.add(p)
         db.session.flush()
     else:
+        # playlist already in so don't do nothing
+        if return_on_duplicate:
+            LOGGER.info(f"{playlist_id} is a dupe")
+            return
+
+        # continue only if re-updating playlists on purpose
         p = Playlist.query.filter_by(spotify_id=playlist_id).first()
 
     # Add tracks
