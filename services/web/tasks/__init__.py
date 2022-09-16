@@ -43,6 +43,7 @@ def process_data(playlist_ids):
             tk.NotFound,
             tk.ServiceUnavailable,
             sq.exc.DataError,
+            sq.exc.IntegrityError,
             psycopg2.errors.UniqueViolation,
             psycopg2.errors.StringDataRightTruncation,
         ) as e:
