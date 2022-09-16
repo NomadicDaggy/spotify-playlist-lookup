@@ -42,6 +42,7 @@ def process_data(playlist_ids):
         except (
             tk.NotFound,
             tk.ServiceUnavailable,
+            tk.TooManyRequests,
             sq.exc.DataError,
             sq.exc.IntegrityError,
             psycopg2.errors.UniqueViolation,
