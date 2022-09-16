@@ -24,7 +24,7 @@
         {% for p in results %}
         <a href="https://open.spotify.com/playlist/{{p.spotify_id}}" target="blank">
             <div class="found-playlist-card">
-                <img src="{{ p.image_url }}" alt="image for {{ p.name }}">
+                <img src="{{ p.image_url }}" alt="image for {{ p.name }}" loading="lazy">
                 <div>
                     <h2 class="playlist-name">{{ p.name }}</h2>
                     <span class="playlist-owner">{{ p.owner_name }}</span>
