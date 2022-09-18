@@ -18,6 +18,11 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+  client:
+    build: ./services/client
+    image: react-flask-app-client
+    ports:
+      - 1338:80
   api-worker01:
     build: ./services/web
     command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info
