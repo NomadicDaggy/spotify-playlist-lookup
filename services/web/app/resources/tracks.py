@@ -1,4 +1,5 @@
 from flask_restful import Resource, reqparse
+from flask import make_response
 
 from app.models import Playlist, Track
 
@@ -37,3 +38,16 @@ class SearchTracks(Resource):
             }
         else:
             return {}, 404
+
+
+class TrackPlaylists(Resource):
+    def get(self, track_spotify_id):
+
+        track = Track.query.filter_by(spotify_id=track_spotify_id).first()
+
+        if track is None:
+            return {}, 404
+
+        playlists = track.get_playlists()
+
+        return make_response({"playlists": [p.as_dict() for p in playlists]})

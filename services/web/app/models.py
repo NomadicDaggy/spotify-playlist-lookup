@@ -117,6 +117,12 @@ class Playlist(db.Model):
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 
+    def as_dict(self):
+        return {
+            c: getattr(self, c)
+            for c in ["spotify_id", "name", "description", "image_url", "owner_name"]
+        }
+
 
 class Track(db.Model):
     __tablename__ = "tracks"
