@@ -8,8 +8,5 @@
     Currently we keep track of <b>{{ playlist_count }}</b> Spotify playlists and <b>{{ track_count }}</b> tracks
 </div>
 
-{% if current_user.is_anonymous %}
-<a id="spotify-login-button" href="{{ url_for('route_blueprint.login') }}">Login</a>
-{% else %}
-{% endif %}
+<a id="spotify-login-button" href="{{ url_for('route_blueprint.search_playlists') }}">Search Playlists</a>
 {% endblock %}

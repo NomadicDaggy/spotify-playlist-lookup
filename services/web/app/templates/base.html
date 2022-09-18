@@ -35,9 +35,9 @@
             <a href="{{ url_for('route_blueprint.index') }}">Home</a>
             {% if current_user.is_anonymous %}
             <!--<a href="{{ url_for('route_blueprint.login') }}">Login</a>-->
-            {% else %}
             <a href="{{ url_for('route_blueprint.search_playlists') }}">Search Playlists</a>
             <a href="{{ url_for('route_blueprint.import_playlists') }}">Import Playlists</a>
+            {% else %}
             <a href="{{ url_for('route_blueprint.logout') }}">Logout</a>
             {% endif %}
         </div>

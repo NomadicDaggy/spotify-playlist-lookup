@@ -61,7 +61,6 @@ def index():
 
 
 @route_blueprint.route("/playlists", methods=["GET"])
-@login_required
 def playlists():
     return render_template(
         "search_playlists.html",
@@ -72,7 +71,6 @@ def playlists():
 
 
 @route_blueprint.route("/playlists", methods=["POST"])
-@login_required
 def search_playlists():
     form = PlaylistSearchForm()
     if form.validate_on_submit():
@@ -102,7 +100,6 @@ def search_playlists():
 
 
 @route_blueprint.route("/playlists/import", methods=["GET", "POST"])
-@login_required
 def import_playlists():
     form = PlaylistInputForm()
     if form.validate_on_submit():
