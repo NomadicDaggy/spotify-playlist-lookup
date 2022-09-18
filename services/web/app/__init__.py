@@ -2,7 +2,8 @@ import os
 import logging
 from flask import Flask
 
-from extensions import db, migrate, celery, api
+from extensions import db, migrate, celery
+from app.api import api
 
 
 logging.basicConfig(
