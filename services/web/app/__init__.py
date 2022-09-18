@@ -2,7 +2,7 @@ import os
 import logging
 from flask import Flask
 
-from extensions import db, migrate, celery
+from extensions import db, migrate, celery, api
 
 
 logging.basicConfig(
@@ -27,6 +27,8 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
     init_celery(app)
+
+    api.init_app(app)
 
     from app.routes import route_blueprint, login_manager
 
