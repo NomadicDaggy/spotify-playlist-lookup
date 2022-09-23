@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheWelcome from "../components/TheWelcome.vue";
+import TrackSearch from "../components/TrackSearch.vue";
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <TrackSearch />
   </main>
 </template>

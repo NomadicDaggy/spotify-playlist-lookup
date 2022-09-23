@@ -33,7 +33,7 @@ services:
       - 8080:8080
   api-worker01:
     build: ./services/web
-    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info
+    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info --concurrency=2
     environment:
       - APP_ENV=Dev
     env_file:
