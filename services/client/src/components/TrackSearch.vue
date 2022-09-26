@@ -1,10 +1,16 @@
 <script setup lang="ts">
-console.log("hi");
+import { ref } from "vue";
+
+const searchTerm = ref("");
+
+function logSearch() {
+  console.log(searchTerm.value);
+}
 </script>
 
 <template>
   <div class="track-search-container">
-    <input type="text" />
+    <input v-model="searchTerm" @keyup.enter="logSearch" />
   </div>
 </template>
 
