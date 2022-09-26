@@ -11,6 +11,7 @@ tekore==4.4.0
 python-dotenv==0.20.0
 flask-migrate==3.1.0
 flask-restful==0.3.9
+flask-CORS==3.0.10
 celery
 watchdog
 black

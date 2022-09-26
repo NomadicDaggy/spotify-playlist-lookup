@@ -1,6 +1,7 @@
 import os
 import logging
 from flask import Flask
+from flask_cors import CORS
 
 from extensions import db, migrate, celery
 from app.api import api
@@ -24,6 +25,8 @@ def create_app():
 
     app.config.from_object(confname)
     app.secret_key = app.config["SECRET_KEY"]
+
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     db.init_app(app)
     migrate.init_app(app, db)

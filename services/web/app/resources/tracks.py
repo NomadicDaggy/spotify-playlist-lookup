@@ -37,7 +37,7 @@ class SearchTracks(Resource):
                 "name": track.name,
             }
         else:
-            return {}, 404
+            return {}
 
 
 class TrackPlaylists(Resource):
