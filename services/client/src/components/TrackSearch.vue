@@ -1,14 +1,20 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Ref } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import TrackResult from "./TrackResult.vue";
 
-const searchTerm = ref("");
+const router = useRouter();
+const route = useRoute();
+
+const searchTerm = ref(route.query.name);
 const statusText = ref("Enter text to search playlists by tracks they contain");
 const tracks = ref();
 
 const fetchTracks = () => {
+  // add param to url
+  router.replace({ name: "tracks", query: { name: searchTerm.value } });
+
   axios
     .get("http://localhost:1337/api/v1/tracks?name=" + searchTerm.value)
     .then((response) => {
@@ -21,6 +27,10 @@ const fetchTracks = () => {
       console.log(error);
     });
 };
+
+if (searchTerm.value) {
+  fetchTracks();
+}
 </script>
 
 <template>
