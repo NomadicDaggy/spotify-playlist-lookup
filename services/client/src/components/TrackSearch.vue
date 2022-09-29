@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import type { Ref } from "vue";
 import axios from "axios";
+import TrackResult from "./TrackResult.vue";
 
 const searchTerm = ref("");
 const statusText = ref("Enter text to search playlists by tracks they contain");
@@ -20,24 +21,19 @@ const fetchTracks = () => {
       console.log(error);
     });
 };
-
-function selectTrack(track: Ref) {
-  console.log(track);
-}
 </script>
 
 <template>
   <div class="track-search-container">
     <input v-model="searchTerm" @keyup.enter="fetchTracks" />
     <span>{{ statusText }}</span>
-    <div id="tracks-container">
-      <div
-        v-for="track in tracks"
+    <div class="tracks-container">
+      <TrackResult
+        v-for="(track, index) in tracks"
+        :track="track"
+        :index="index"
         :key="track.spotify_id"
-        @click="selectTrack(track)"
-      >
-        {{ track.name }}
-      </div>
+      />
     </div>
   </div>
 </template>
@@ -47,5 +43,11 @@ input {
   min-width: 250px;
   margin: 20px auto;
   display: block;
+}
+
+div.tracks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 </style>
