@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import type { Ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
-import TrackResult from "./TrackResult.vue";
+import TrackCard from "./TrackCard.vue";
+import type Track from "./TrackCard.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -31,6 +33,14 @@ const fetchTracks = () => {
 if (searchTerm.value) {
   fetchTracks();
 }
+
+const selectTrack = (track: Ref<typeof Track>) => {
+  // TODO: pass track to pinia
+  router.push({
+    name: "trackPlaylists",
+    params: { trackSpotifyID: track.spotify_id },
+  });
+};
 </script>
 
 <template>
@@ -38,11 +48,12 @@ if (searchTerm.value) {
     <input v-model="searchTerm" @keyup.enter="fetchTracks" />
     <span>{{ statusText }}</span>
     <div class="tracks-container">
-      <TrackResult
+      <TrackCard
         v-for="(track, index) in tracks"
         :track="track"
         :index="index"
         :key="track.spotify_id"
+        @click="selectTrack(track)"
       />
     </div>
   </div>
