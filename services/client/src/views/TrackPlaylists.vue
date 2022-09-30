@@ -11,7 +11,7 @@ const router = useRouter();
 const route = useRoute();
 
 const store = useTrackStore();
-const { storedTrack } = storeToRefs(store); // Track | undefined
+const { storedTrack } = storeToRefs(store);
 
 // If no value in pinia store, then the user has come here without first selecting a track,
 // rather they just followed a link straight to this page.
@@ -33,18 +33,20 @@ if (!storedTrack.value) {
 }
 
 const playlists = ref();
-axios
-  .get(
-    "http://localhost:1337/api/v1/tracks/" +
-      storedTrack.value.spotify_id +
-      "/playlists"
-  )
-  .then((response) => {
-    playlists.value = response.data["playlists"];
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+if (storedTrack.value) {
+  axios
+    .get(
+      "http://localhost:1337/api/v1/tracks/" +
+        storedTrack.value.spotify_id +
+        "/playlists"
+    )
+    .then((response) => {
+      playlists.value = response.data["playlists"];
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+}
 </script>
 
 <template>
@@ -52,6 +54,7 @@ axios
     <!-- <span>{{ statusText }}</span> -->
     <TrackCard v-if="storedTrack" :track="storedTrack" :selected="true" />
     <div v-else>Loading...</div>
+
     <div class="playlists-container">
       <PlaylistCard
         v-for="(playlist, index) in playlists"

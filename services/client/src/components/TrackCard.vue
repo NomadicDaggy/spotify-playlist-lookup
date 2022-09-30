@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {} from "vue";
+import type { Ref } from "vue";
 
 export interface Track {
   name: {
@@ -15,13 +16,13 @@ export interface Track {
 }
 
 export interface Props {
-  track: Track;
+  track: any;
   selected: boolean;
 }
 
-const props = withDefaults(defineProps<Props>(), {});
+const props = defineProps<Props>();
 
-props.track; // Track | undefined
+props.track; // Ref<tyepof Track | null>
 props.selected; // boolean
 </script>
 

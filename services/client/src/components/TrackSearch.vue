@@ -6,7 +6,6 @@ import axios from "axios";
 import TrackCard from "./TrackCard.vue";
 import type Track from "./TrackCard.vue";
 import { useTrackStore } from "../stores/track";
-import { storeToRefs } from "pinia";
 
 const router = useRouter();
 const route = useRoute();
@@ -16,7 +15,7 @@ const store = useTrackStore();
 
 const searchTerm = ref(route.query.name);
 const statusText = ref("Enter text to search playlists by tracks they contain");
-const tracks = ref();
+const tracks = ref<typeof Track | null>(null);
 
 const fetchTracks = () => {
   // add param to url
@@ -39,15 +38,16 @@ if (searchTerm.value) {
   fetchTracks();
 }
 
-const selectTrack = (track: Ref<typeof Track>) => {
-  // TODO: pass track to pinia
+const selectTrack = (track: any) => {
   store.$patch({
     storedTrack: track,
   });
 
   router.push({
     name: "trackPlaylists",
-    params: { trackSpotifyID: track.spotify_id },
+    params: {
+      trackSpotifyID: track.spotify_id,
+    },
   });
 };
 </script>
