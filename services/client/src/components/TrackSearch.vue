@@ -60,6 +60,7 @@ const selectTrack = (track: Ref<typeof Track>) => {
       <TrackCard
         v-for="(track, index) in tracks"
         :track="track"
+        :selected="false"
         :index="index"
         :key="track.spotify_id"
         @click="selectTrack(track)"

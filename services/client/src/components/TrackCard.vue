@@ -16,15 +16,22 @@ export interface Track {
 
 export interface Props {
   track: Track;
+  selected: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {});
 
 props.track; // Track | undefined
+props.selected; // boolean
 </script>
 
 <template>
-  <div class="track-result-card">{{ track.name }}</div>
+  <div class="track-result-card" :class="{ selected: selected }">
+    <span v-if="track">
+      {{ track.name }}
+    </span>
+    <span v-else>Loading...</span>
+  </div>
 </template>
 
 <style>
@@ -32,5 +39,9 @@ props.track; // Track | undefined
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px;
+}
+
+.selected {
+  border: 1px solid green;
 }
 </style>

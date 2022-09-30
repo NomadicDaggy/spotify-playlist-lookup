@@ -12,7 +12,7 @@ const router = useRouter();
 const route = useRoute();
 
 const store = useTrackStore();
-const { storedTrack } = storeToRefs(store);
+const { storedTrack } = storeToRefs(store); // Track | undefined
 
 const playlists = ref();
 
@@ -20,14 +20,27 @@ const playlists = ref();
 // rather they just followed a link straight to this page.
 // So we need to get the track from the url parameter from our backend api
 if (!storedTrack.value) {
-  // TODO: ^
+  axios
+    .get(
+      "http://localhost:1337/api/v1/tracks?spotify_id=" +
+        route.params.trackSpotifyID
+    )
+    .then((response) => {
+      store.$patch({
+        storedTrack: response.data,
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 </script>
 
 <template>
   <div class="playlist-results-container">
     <!-- <span>{{ statusText }}</span> -->
-    <TrackCard :track="storedTrack" />
+    <TrackCard v-if="storedTrack" :track="storedTrack" :selected="true" />
+    <div v-else>Loading...</div>
     <div class="playlists-container">
       <PlaylistCard
         v-for="(playlist, index) in playlists"

@@ -24,13 +24,16 @@ class SearchTracks(Resource):
 
         args = parser.parse_args()
 
+        if args.spotify_id:
+            track = Track.query.filter_by(spotify_id=args.spotify_id).first()
+            return {
+                "spotify_id": track.spotify_id,
+                "name": track.name,
+            }
+
         if args.name:
             tracks_query = Track.query.filter(Track.name.ilike(f"%{args.name}%"))
             count = tracks_query.count()
-
-        # TODO: re-enable this
-        # if args.spotify_id:
-        #     track = Track.query.filter_by(spotify_id=args.spotify_id).first()
 
         if tracks_query:
             if count < 50:
