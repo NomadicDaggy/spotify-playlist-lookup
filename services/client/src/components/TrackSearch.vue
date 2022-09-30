@@ -72,8 +72,13 @@ const selectTrack = (track: any) => {
 <style>
 input {
   min-width: 250px;
-  margin: 20px auto;
+  height: 2rem;
+  border: 1px solid black;
+  border-radius: 14px;
+  padding-left: 14px;
+  margin: 1rem auto;
   display: block;
+  font-size: 1.2rem;
 }
 
 div.tracks-container {

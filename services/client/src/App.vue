@@ -9,6 +9,7 @@ import { RouterLink, RouterView } from "vue-router";
         <RouterLink to="/tracks">Home</RouterLink>
         <RouterLink to="/about">About</RouterLink>
       </nav>
+      <div class="site-name"><h1>Spotify Playlist Lookup</h1></div>
     </div>
   </header>
   <RouterView />
@@ -22,21 +23,19 @@ div#app {
 header {
   line-height: 1.5;
   max-height: 100vh;
-  padding-right: calc(var(--section-gap) / 2);
 }
 
 header .wrapper {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
 nav {
   width: 100%;
 
   text-align: left;
-  margin-left: -1rem;
   font-size: 1rem;
+  border-bottom: 1px solid rgb(239, 239, 239);
 }
 
 nav a.router-link-exact-active {
@@ -49,12 +48,21 @@ nav a.router-link-exact-active:hover {
 
 nav a {
   display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  padding: 0.4rem 1rem;
 }
 
 nav a:first-of-type {
   border: 0;
+}
+
+.site-name {
+  width: 100%;
+  display: block;
+  margin-top: 1rem;
+
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 2.2rem;
 }
 
 @media (min-width: 1024px) {
