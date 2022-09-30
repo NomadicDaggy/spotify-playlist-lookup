@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import PlaylistCard from "../components/PlaylistCard.vue";
-import Track from "../components/TrackCard.vue";
 import { useTrackStore } from "../stores/track";
 import { storeToRefs } from "pinia";
 import TrackCard from "../components/TrackCard.vue";
@@ -13,8 +12,6 @@ const route = useRoute();
 
 const store = useTrackStore();
 const { storedTrack } = storeToRefs(store); // Track | undefined
-
-const playlists = ref();
 
 // If no value in pinia store, then the user has come here without first selecting a track,
 // rather they just followed a link straight to this page.
@@ -34,6 +31,20 @@ if (!storedTrack.value) {
       console.log(error);
     });
 }
+
+const playlists = ref();
+axios
+  .get(
+    "http://localhost:1337/api/v1/tracks/" +
+      storedTrack.value.spotify_id +
+      "/playlists"
+  )
+  .then((response) => {
+    playlists.value = response.data["playlists"];
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 </script>
 
 <template>
