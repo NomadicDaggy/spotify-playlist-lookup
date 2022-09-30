@@ -13,10 +13,28 @@ const route = useRoute();
 const store = useTrackStore();
 const { storedTrack } = storeToRefs(store);
 
-// If no value in pinia store, then the user has come here without first selecting a track,
-// rather they just followed a link straight to this page.
-// So we need to get the track from the url parameter from our backend api
-if (!storedTrack.value) {
+const playlists = ref();
+const getPlaylists = () => {
+  axios
+    .get(
+      "http://localhost:1337/api/v1/tracks/" +
+        storedTrack.value?.spotify_id +
+        "/playlists"
+    )
+    .then((response) => {
+      playlists.value = response.data["playlists"];
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+if (storedTrack.value) {
+  getPlaylists();
+} else {
+  // If no value in pinia store, then the user has come here without first selecting a track,
+  // rather they just followed a link straight to this page.
+  // So we need to get the track from the url parameter from our backend api
   axios
     .get(
       "http://localhost:1337/api/v1/tracks?spotify_id=" +
@@ -26,22 +44,7 @@ if (!storedTrack.value) {
       store.$patch({
         storedTrack: response.data,
       });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-}
-
-const playlists = ref();
-if (storedTrack.value) {
-  axios
-    .get(
-      "http://localhost:1337/api/v1/tracks/" +
-        storedTrack.value.spotify_id +
-        "/playlists"
-    )
-    .then((response) => {
-      playlists.value = response.data["playlists"];
+      getPlaylists();
     })
     .catch((error) => {
       console.log(error);
@@ -55,7 +58,7 @@ if (storedTrack.value) {
     <TrackCard v-if="storedTrack" :track="storedTrack" :selected="true" />
     <div v-else>Loading...</div>
 
-    <div class="playlists-container">
+    <div class="playlists-container" v-if="playlists">
       <PlaylistCard
         v-for="(playlist, index) in playlists"
         :playlist="playlist"
@@ -63,6 +66,7 @@ if (storedTrack.value) {
         :key="playlist.spotify_id"
       />
     </div>
+    <div v-else>Loading...</div>
   </div>
 </template>
 
