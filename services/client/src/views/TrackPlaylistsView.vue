@@ -59,6 +59,7 @@ if (storedTrack.value) {
     <div v-else>Loading...</div>
 
     <div class="playlists-container" v-if="playlists">
+      <span class="status-text">Playlists containing selected track</span>
       <PlaylistCard
         v-for="(playlist, index) in playlists"
         :playlist="playlist"
@@ -71,12 +72,6 @@ if (storedTrack.value) {
 </template>
 
 <style>
-input {
-  min-width: 250px;
-  margin: 20px auto;
-  display: block;
-}
-
 div.playlist-results-container {
   display: flex;
   flex-direction: column;

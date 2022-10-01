@@ -14,7 +14,7 @@ const store = useTrackStore();
 // const { storedTrack } = storeToRefs(store);
 
 const searchTerm = ref(route.query.name);
-const statusText = ref("Enter text to search playlists by tracks they contain");
+const statusText = ref("Find playlists that contain a specific track");
 const tracks = ref<typeof Track | null>(null);
 
 const fetchTracks = () => {
@@ -54,8 +54,13 @@ const selectTrack = (track: any) => {
 
 <template>
   <div class="track-search-container">
-    <input v-model="searchTerm" @keyup.enter="fetchTracks" />
-    <span>{{ statusText }}</span>
+    <input
+      v-model="searchTerm"
+      @keyup.enter="fetchTracks"
+      placeholder="Track name"
+      class="track-name-input"
+    />
+    <span class="status-text">{{ statusText }}</span>
     <div class="tracks-container">
       <TrackCard
         v-for="(track, index) in tracks"
@@ -70,13 +75,13 @@ const selectTrack = (track: any) => {
 </template>
 
 <style>
-input {
-  min-width: 250px;
+input.track-name-input {
+  max-width: 80vw;
   height: 2rem;
   border: 1px solid black;
   border-radius: 14px;
   padding-left: 14px;
-  margin: 1rem auto;
+  margin: 0 auto;
   display: block;
   font-size: 1.2rem;
 }
@@ -85,5 +90,11 @@ div.tracks-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+span.status-text {
+  text-align: center;
+  display: block;
+  padding: 1rem;
 }
 </style>

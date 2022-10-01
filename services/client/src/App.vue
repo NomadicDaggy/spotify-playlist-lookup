@@ -55,16 +55,16 @@ nav a:first-of-type {
   border: 0;
 }
 
-.site-name {
+div.site-name {
   width: 100%;
   display: block;
-  margin-top: 1rem;
-
-  text-align: center;
-  font-size: 1.1rem;
-  line-height: 2.2rem;
+  margin: 3rem 0;
 }
 
-@media (min-width: 1024px) {
+div.site-name h1 {
+  text-align: center;
+  font-size: 1.8rem;
+  line-height: 2rem;
+  font-weight: 700;
 }
 </style>
