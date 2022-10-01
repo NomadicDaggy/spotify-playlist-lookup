@@ -46,6 +46,9 @@ class MaterializedPlaylist:
         return {
             "id": track_api_dict["track"]["id"],
             "name": track_api_dict["track"]["name"][:200],
+            "artist_name": ", ".join(
+                [a["name"] for a in track_api_dict["track"]["artists"]]
+            )[:200],
         }
 
     def get_data(self, include_tracks=True) -> dict:
