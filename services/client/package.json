@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^0.27.2",
+    "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.0.21",
     "vue": "^3.2.38",
     "vue-router": "^4.1.5"
