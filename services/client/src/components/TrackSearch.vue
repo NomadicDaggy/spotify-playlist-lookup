@@ -18,6 +18,13 @@ const statusText = ref("Find playlists that contain a specific track");
 const tracks = ref<typeof Track | null>(null);
 
 const fetchTracks = () => {
+  if (!searchTerm.value) {
+    statusText.value =
+      "Please enter text to search tracks by. It can even be just part of the track name.";
+
+    return;
+  }
+
   // add param to url
   router.replace({ name: "tracks", query: { name: searchTerm.value } });
 
