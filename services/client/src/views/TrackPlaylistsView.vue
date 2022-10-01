@@ -54,14 +54,16 @@ if (storedTrack.value) {
 
 <template>
   <div class="playlist-results-container">
-    <span class="track-selected-note">Selected track:</span>
-    <div class="track-span">
-      <div @click="router.go(-1)" class="back-button-div">
-        <v-icon name="io-chevron-back-outline" class="back-button" />
-      </div>
-      <div class="track-card-container">
-        <TrackCard v-if="storedTrack" :track="storedTrack" :selected="true" />
-        <div v-else>Loading...</div>
+    <div>
+      <div class="track-selected-note">Selected track:</div>
+      <div class="track-span">
+        <div @click="router.go(-1)" class="back-button-div">
+          <v-icon name="io-chevron-back-outline" class="back-button" />
+        </div>
+        <div class="track-card-container">
+          <TrackCard v-if="storedTrack" :track="storedTrack" :selected="true" />
+          <div v-else>Loading...</div>
+        </div>
       </div>
     </div>
 
@@ -82,10 +84,10 @@ if (storedTrack.value) {
 div.playlist-results-container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 
-span.track-selected-note {
+div.track-selected-note {
   width: 100%;
   text-align: center;
 }
@@ -117,6 +119,6 @@ span.status-text {
   text-align: center;
   display: block;
   padding-top: 1rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0rem;
 }
 </style>

@@ -59,13 +59,15 @@ nav a:first-of-type {
 div.site-name {
   width: 100%;
   display: block;
-  margin: 3rem 0;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
 }
 
 div.site-name h1 {
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.2rem;
   line-height: 2rem;
   font-weight: 700;
+  color: gray;
 }
 </style>
