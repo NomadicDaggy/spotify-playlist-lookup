@@ -29,6 +29,7 @@ class SearchTracks(Resource):
             return {
                 "spotify_id": track.spotify_id,
                 "name": track.name,
+                "artistName": track.artist_name,
             }
 
         if args.name:
@@ -41,6 +42,7 @@ class SearchTracks(Resource):
                     {
                         "spotify_id": track.spotify_id,
                         "name": track.name,
+                        "artistName": track.artist_name,
                     }
                     for track in tracks_query.all()
                 ]

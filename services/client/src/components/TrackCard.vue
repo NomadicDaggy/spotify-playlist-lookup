@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import {} from "vue";
-import type { Ref } from "vue";
 
 export interface Track {
   name: {
+    type: String;
+    default: "";
+    required: true;
+  };
+  artistName: {
     type: String;
     default: "";
     required: true;
@@ -27,19 +31,34 @@ props.selected; // boolean
 </script>
 
 <template>
-  <div class="track-result-card" :class="{ selected: selected }">
-    <span v-if="track">
-      {{ track.name }}
-    </span>
-    <span v-else>Loading...</span>
+  <div class="track-result-card" :class="{ selected: selected }" v-if="track">
+    <span class="track-name">{{ track.name }}</span>
+    <span class="track-artist">{{ track.artistName }}</span>
   </div>
+  <span v-else>Loading...</span>
 </template>
 
 <style>
 .track-result-card {
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px;
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-top: -1px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+span.track-name {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+span.track-artist {
+  font-size: 0.8rem;
+  line-height: 1;
+  color: gray;
 }
 
 .selected {

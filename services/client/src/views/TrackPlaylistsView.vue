@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRouter, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 import axios from "axios";
 import PlaylistCard from "../components/PlaylistCard.vue";
 import { useTrackStore } from "../stores/track";
 import { storeToRefs } from "pinia";
 import TrackCard from "../components/TrackCard.vue";
 
-const router = useRouter();
 const route = useRoute();
 
 const store = useTrackStore();
@@ -44,6 +43,7 @@ if (storedTrack.value) {
       store.$patch({
         storedTrack: response.data,
       });
+      console.log(response.data);
       getPlaylists();
     })
     .catch((error) => {

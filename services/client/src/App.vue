@@ -36,7 +36,7 @@ nav {
   text-align: left;
   font-size: 1rem;
   font-weight: 600;
-  border-bottom: 1px solid rgb(239, 239, 239);
+  border-bottom: 1px solid var(--color-border);
 }
 
 nav a.router-link-exact-active {

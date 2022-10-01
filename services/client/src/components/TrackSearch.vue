@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import type { Ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import TrackCard from "./TrackCard.vue";
@@ -96,7 +95,6 @@ input.track-name-input {
 div.tracks-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 span.status-text {

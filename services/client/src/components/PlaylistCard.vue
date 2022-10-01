@@ -2,50 +2,83 @@
 import {} from "vue";
 
 export interface Playlist {
-  name: {
-    type: String;
-    default: "";
-    required: true;
-  };
-  spotify_id: {
-    type: String;
-    default: "";
-    required: true;
-  };
-  image_url: {
-    type: String;
-    default: "";
-    required: true;
-  };
-  owner_name: {
-    type: String;
-    default: "";
-    required: true;
-  };
-  description: {
-    type: String;
-    default: "";
-    required: true;
-  };
+  name: string;
+  spotify_id: string;
+  image_url: string;
+  owner_name: string;
+  description: string;
 }
 
 export interface Props {
   playlist: Playlist;
 }
 
-const props = withDefaults(defineProps<Props>(), {});
+const props = defineProps<Props>();
 
 props.playlist; // Playlist | undefined
 </script>
 
 <template>
-  <div class="playlist-result-card">{{ playlist.name }}</div>
+  <div class="playlist-result-card">
+    <div>
+      <img :src="playlist.image_url" loading="lazy" class="playlist-image" />
+      <div>
+        <h2 class="playlist-name">{{ playlist.name }}</h2>
+        <span class="playlist-owner">{{ playlist.owner_name }}</span>
+      </div>
+    </div>
+    <div class="playlist-description" v-if="playlist.description">
+      {{ playlist.description }}
+    </div>
+  </div>
 </template>
 
 <style>
-.playlist-result-card {
-  border: 1px solid black;
-  border-radius: 5px;
-  padding: 5px;
+div.playlist-result-card {
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  margin-top: -1px;
+  padding: 1rem 0;
+}
+
+div.playlist-result-card > div {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+div.playlist-result-card > div > div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+img.playlist-image {
+  height: 85px;
+  width: 85px;
+  object-fit: cover;
+  object-position: center;
+  margin: 0;
+  border-radius: 15px;
+  border: 0px transparent;
+}
+
+h2.playlist-name {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+span.playlist-owner {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+div.playlist-description {
+  font-size: 0.9rem;
+  text-align: left;
+  line-height: 1;
+  margin-top: 1rem;
+  color: gray;
 }
 </style>
