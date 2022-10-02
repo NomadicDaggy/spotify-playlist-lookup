@@ -85,7 +85,7 @@ div.playlist-description {
 
 @media only screen and (min-width: 768px) {
   div.playlist-result-card {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     border: 1px solid var(--color-border);
     border-radius: 1rem;
   }

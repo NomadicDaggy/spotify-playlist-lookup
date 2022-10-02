@@ -7,8 +7,24 @@ import FooterNotice from "./components/FooterNotice.vue";
   <header>
     <div class="wrapper">
       <nav>
-        <RouterLink to="/tracks">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
+        <div class="left-links">
+          <RouterLink to="/tracks">Home</RouterLink>
+          <RouterLink to="/about">About</RouterLink>
+        </div>
+        <div class="right-links">
+          <a
+            href="https://github.com/NomadicDaggy/spotify-playlist-lookup"
+            target="_blank"
+          >
+            <div>
+              <img
+                id="gh-logo"
+                :src="'/GitHub-Mark-32px.png'"
+                alt="Github Logo"
+              />
+            </div>
+          </a>
+        </div>
       </nav>
       <div class="site-name"><h1>Spotify Playlist Lookup</h1></div>
     </div>
@@ -36,6 +52,10 @@ nav {
   font-size: 1rem;
   font-weight: 600;
   border-bottom: 1px solid var(--color-border);
+
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 nav a.router-link-exact-active {
@@ -46,9 +66,22 @@ nav a.router-link-exact-active:hover {
   background-color: transparent;
 }
 
-nav a {
+nav div.left-links a {
   display: inline-block;
   padding: 0.4rem 1rem;
+}
+
+nav div.right-links div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 1rem;
+}
+
+img#gh-logo {
+  width: 25px;
+  height: 25px;
 }
 
 nav a:first-of-type {

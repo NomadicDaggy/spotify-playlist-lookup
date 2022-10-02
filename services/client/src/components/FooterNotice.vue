@@ -16,7 +16,7 @@ div.footer {
   align-self: center;
   text-align: center;
   padding-top: 2rem;
-  line-height: 1;
+  line-height: 1.2;
   font-size: 0.8rem;
 }
 </style>
