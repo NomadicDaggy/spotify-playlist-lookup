@@ -19,18 +19,23 @@ props.playlist; // Playlist | undefined
 </script>
 
 <template>
-  <div class="playlist-result-card">
-    <div>
-      <img :src="playlist.imageURL" loading="lazy" class="playlist-image" />
+  <a
+    :href="'https://open.spotify.com/playlist/' + playlist.spotifyID"
+    target="_blank"
+  >
+    <div class="playlist-result-card">
       <div>
-        <h2 class="playlist-name">{{ playlist.name }}</h2>
-        <span class="playlist-owner">{{ playlist.ownerName }}</span>
+        <img :src="playlist.imageURL" loading="lazy" class="playlist-image" />
+        <div>
+          <h2 class="playlist-name">{{ playlist.name }}</h2>
+          <span class="playlist-owner">{{ playlist.ownerName }}</span>
+        </div>
+      </div>
+      <div class="playlist-description" v-if="playlist.description">
+        {{ playlist.description }}
       </div>
     </div>
-    <div class="playlist-description" v-if="playlist.description">
-      {{ playlist.description }}
-    </div>
-  </div>
+  </a>
 </template>
 
 <style>
@@ -40,6 +45,7 @@ div.playlist-result-card {
   margin-top: -1px;
   padding: 1rem 0;
   cursor: pointer;
+  color: var(--color-text);
 }
 
 div.playlist-result-card > div {
@@ -88,6 +94,10 @@ div.playlist-description {
     margin-bottom: 1rem;
     border: 1px solid var(--color-border);
     border-radius: 1rem;
+  }
+
+  div.playlist-result-card:hover {
+    background-color: var(--green-background);
   }
 }
 </style>
