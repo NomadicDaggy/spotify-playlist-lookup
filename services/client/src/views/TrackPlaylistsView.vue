@@ -108,6 +108,7 @@ div.back-button-div {
   justify-content: center;
   align-items: center;
   min-width: 4rem;
+  cursor: pointer;
 }
 
 .back-button {

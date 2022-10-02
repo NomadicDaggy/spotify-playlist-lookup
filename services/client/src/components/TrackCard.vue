@@ -39,7 +39,7 @@ props.selected; // boolean
 </template>
 
 <style>
-.track-result-card {
+div.track-result-card {
   padding: 1rem;
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
@@ -48,6 +48,8 @@ props.selected; // boolean
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+
+  cursor: pointer;
 }
 
 span.track-name {
@@ -64,5 +66,19 @@ span.track-artist {
 .selected {
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
+
+  cursor: default;
+}
+
+@media only screen and (min-width: 768px) {
+  div.track-result-card {
+    margin: 0.5rem 0;
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+  }
+
+  div.track-result-card:hover {
+    background-color: var(--green-background);
+  }
 }
 </style>

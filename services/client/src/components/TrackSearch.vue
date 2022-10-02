@@ -102,4 +102,11 @@ span.status-text {
   display: block;
   padding: 1rem;
 }
+
+@media only screen and (min-width: 768px) {
+  div.tracks-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+}
 </style>

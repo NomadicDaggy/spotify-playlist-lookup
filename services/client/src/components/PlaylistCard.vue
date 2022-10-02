@@ -39,6 +39,7 @@ div.playlist-result-card {
   border-bottom: 1px solid var(--color-border);
   margin-top: -1px;
   padding: 1rem 0;
+  cursor: pointer;
 }
 
 div.playlist-result-card > div {
