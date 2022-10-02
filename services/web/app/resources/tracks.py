@@ -12,7 +12,7 @@ parser.add_argument(
     required=False,
 )
 parser.add_argument(
-    "spotify_id",
+    "spotifyID",
     dest="spotify_id",
     location="args",
     required=False,
@@ -27,9 +27,10 @@ class SearchTracks(Resource):
         if args.spotify_id:
             track = Track.query.filter_by(spotify_id=args.spotify_id).first()
             return {
-                "spotify_id": track.spotify_id,
+                "spotifyID": track.spotify_id,
                 "name": track.name,
                 "artistName": track.artist_name,
+                "albumName": track.album_name,
             }
 
         if args.name:
@@ -40,9 +41,10 @@ class SearchTracks(Resource):
             if count < 50:
                 tracks_out = [
                     {
-                        "spotify_id": track.spotify_id,
+                        "spotifyID": track.spotify_id,
                         "name": track.name,
                         "artistName": track.artist_name,
+                        "albumName": track.album_name,
                     }
                     for track in tracks_query.all()
                 ]
@@ -67,4 +69,17 @@ class TrackPlaylists(Resource):
 
         playlists = track.get_playlists()
 
-        return make_response({"playlists": [p.as_dict() for p in playlists]})
+        return make_response(
+            {
+                "playlists": [
+                    {
+                        "description": p.description,
+                        "imageURL": p.image_url,
+                        "name": p.name,
+                        "ownerName": p.owner_name,
+                        "spotifyID": p.spotify_id,
+                    }
+                    for p in playlists
+                ]
+            }
+        )

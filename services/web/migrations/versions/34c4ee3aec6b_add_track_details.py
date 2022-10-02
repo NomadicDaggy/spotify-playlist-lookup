@@ -22,8 +22,15 @@ def upgrade():
         "tracks",
         sa.Column("artist_name", sa.String(length=200), server_default=""),
     )
+    op.add_column(
+        "tracks",
+        sa.Column("album_name", sa.String(length=100), server_default=""),
+    )
     op.execute("UPDATE tracks SET artist_name = ''")
+    op.execute("UPDATE tracks SET album_name = ''")
+
     op.alter_column("tracks", "artist_name", nullable=False)
+    op.alter_column("tracks", "album_name", nullable=False)
     # ### end Alembic commands ###
 
 

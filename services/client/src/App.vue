@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import FooterNotice from "./components/FooterNotice.vue";
 </script>
 
 <template>
@@ -13,13 +14,10 @@ import { RouterLink, RouterView } from "vue-router";
     </div>
   </header>
   <RouterView />
+  <FooterNotice />
 </template>
 
 <style scoped>
-div#app {
-  display: flex;
-}
-
 header {
   line-height: 1.5;
   max-height: 100vh;
@@ -28,6 +26,7 @@ header {
 header .wrapper {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
 }
 
 nav {

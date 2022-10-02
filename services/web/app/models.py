@@ -131,6 +131,7 @@ class Track(db.Model):
     spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
     name = db.Column(db.String(200), index=True, nullable=False)
     artist_name = db.Column(db.String(200), nullable=False, server_default="")
+    album_name = db.Column(db.String(100), nullable=False, server_default="")
 
     playlists = db.relationship("PlaylistTrack", back_populates="track")
 
@@ -214,6 +215,7 @@ def insert_playlists_tracks(playlist_dict, return_on_duplicate=True):
                 spotify_id=track_sid,
                 name=track["name"],
                 artist_name=track["artist_name"],
+                album_name=track["album_name"],
             )
             db.session.add(t)
             db.session.flush()

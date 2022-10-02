@@ -10,7 +10,7 @@ LOGGER = logging.getLogger()
 
 parser = reqparse.RequestParser()
 parser.add_argument(
-    "playlist_ids",
+    "playlistIDs",
     dest="playlist_ids",
     type=list,
     location="json",

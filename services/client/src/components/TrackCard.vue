@@ -12,7 +12,7 @@ export interface Track {
     default: "";
     required: true;
   };
-  spotify_id: {
+  spotifyID: {
     type: String;
     default: "";
     required: true;
@@ -34,6 +34,7 @@ props.selected; // boolean
   <div class="track-result-card" :class="{ selected: selected }" v-if="track">
     <span class="track-name">{{ track.name }}</span>
     <span class="track-artist">{{ track.artistName }}</span>
+    <span class="track-album">{{ track.albumName }}</span>
   </div>
   <span v-else>Loading...</span>
 </template>
@@ -63,11 +64,20 @@ span.track-artist {
   color: gray;
 }
 
-.selected {
+span.track-album {
+  font-size: 0.7rem;
+  line-height: 1;
+  color: gray;
+  padding-top: 0.3rem;
+}
+
+div.selected {
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
 
   cursor: default;
+
+  margin-top: 0px;
 }
 
 @media only screen and (min-width: 768px) {
@@ -79,6 +89,20 @@ span.track-artist {
 
   div.track-result-card:hover {
     background-color: var(--green-background);
+  }
+
+  div.selected {
+    border-left: none;
+    border-radius: 0;
+
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+
+    margin: 0;
+  }
+
+  div.selected:hover {
+    background-color: unset;
   }
 }
 </style>

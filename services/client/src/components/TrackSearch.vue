@@ -52,7 +52,7 @@ const selectTrack = (track: any) => {
   router.push({
     name: "trackPlaylists",
     params: {
-      trackSpotifyID: track.spotify_id,
+      trackSpotifyID: track.spotifyID,
     },
   });
 };
@@ -73,7 +73,7 @@ const selectTrack = (track: any) => {
         :track="track"
         :selected="false"
         :index="index"
-        :key="track.spotify_id"
+        :key="track.spotifyID"
         @click="selectTrack(track)"
       />
     </div>

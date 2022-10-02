@@ -18,7 +18,7 @@ const getPlaylists = () => {
   axios
     .get(
       "http://localhost:1337/api/v1/tracks/" +
-        storedTrack.value?.spotify_id +
+        storedTrack.value?.spotifyID +
         "/playlists"
     )
     .then((response) => {
@@ -37,7 +37,7 @@ if (storedTrack.value) {
   // So we need to get the track from the url parameter from our backend api
   axios
     .get(
-      "http://localhost:1337/api/v1/tracks?spotify_id=" +
+      "http://localhost:1337/api/v1/tracks?spotifyID=" +
         route.params.trackSpotifyID
     )
     .then((response) => {
@@ -73,7 +73,7 @@ if (storedTrack.value) {
         v-for="(playlist, index) in playlists"
         :playlist="playlist"
         :index="index"
-        :key="playlist.spotify_id"
+        :key="playlist.spotifyID"
       />
     </div>
     <div v-else>Loading...</div>
@@ -109,6 +109,9 @@ div.back-button-div {
   align-items: center;
   min-width: 4rem;
   cursor: pointer;
+  border: 1px solid var(--color-border);
+  border-right: 0;
+  border-left: 0;
 }
 
 .back-button {
@@ -121,5 +124,23 @@ span.status-text {
   display: block;
   padding-top: 1rem;
   padding-bottom: 0rem;
+}
+
+@media only screen and (min-width: 768px) {
+  div.playlist-results-container {
+    width: 700px;
+    margin: 0 auto;
+  }
+
+  div.back-button-div {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-right: 0;
+  }
+
+  div.back-button-div:hover {
+    background-color: var(--green-background);
+  }
 }
 </style>

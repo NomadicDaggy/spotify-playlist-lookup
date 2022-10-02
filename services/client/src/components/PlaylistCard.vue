@@ -3,9 +3,9 @@ import {} from "vue";
 
 export interface Playlist {
   name: string;
-  spotify_id: string;
-  image_url: string;
-  owner_name: string;
+  spotifyID: string;
+  imageURL: string;
+  ownerName: string;
   description: string;
 }
 
@@ -21,10 +21,10 @@ props.playlist; // Playlist | undefined
 <template>
   <div class="playlist-result-card">
     <div>
-      <img :src="playlist.image_url" loading="lazy" class="playlist-image" />
+      <img :src="playlist.imageURL" loading="lazy" class="playlist-image" />
       <div>
         <h2 class="playlist-name">{{ playlist.name }}</h2>
-        <span class="playlist-owner">{{ playlist.owner_name }}</span>
+        <span class="playlist-owner">{{ playlist.ownerName }}</span>
       </div>
     </div>
     <div class="playlist-description" v-if="playlist.description">
@@ -81,5 +81,13 @@ div.playlist-description {
   line-height: 1;
   margin-top: 1rem;
   color: gray;
+}
+
+@media only screen and (min-width: 768px) {
+  div.playlist-result-card {
+    margin-bottom: 2rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+  }
 }
 </style>

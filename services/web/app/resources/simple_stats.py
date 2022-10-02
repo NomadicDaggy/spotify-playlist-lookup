@@ -8,6 +8,6 @@ class SimpleStats(Resource):
         playlist_count = Playlist.query.count()
         track_count = Track.query.count()
         return {
-            "playlist_count": playlist_count,
-            "track_count": track_count,
+            "playlistCount": playlist_count,
+            "trackCount": track_count,
         }
