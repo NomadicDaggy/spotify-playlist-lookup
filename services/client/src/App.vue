@@ -58,12 +58,12 @@ nav {
   justify-content: space-between;
 }
 
-nav a.router-link-exact-active {
-  display: none;
-}
-
 nav a.router-link-exact-active:hover {
   background-color: transparent;
+}
+
+nav div.left-links a.router-link-active {
+  display: none;
 }
 
 nav div.left-links a {
@@ -101,5 +101,18 @@ div.site-name h1 {
   line-height: 2rem;
   font-weight: 700;
   color: gray;
+}
+
+@media only screen and (min-width: 768px) {
+  div.site-name {
+    position: relative;
+    margin: 0 auto;
+    width: fit-content;
+    margin-top: -2.2rem;
+  }
+
+  header {
+    margin-bottom: 3rem;
+  }
 }
 </style>
