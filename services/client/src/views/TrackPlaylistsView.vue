@@ -85,7 +85,7 @@ div.playlist-results-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gray;
 }
 
 div.track-selected-note {
@@ -110,7 +110,7 @@ div.back-button-div {
   align-items: center;
   min-width: 4rem;
   cursor: pointer;
-  border: 1px solid black;
+  border: 1px solid gray;
   border-right: 0;
   border-left: 0;
 }
@@ -137,7 +137,7 @@ span.status-text {
   div.back-button-div {
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
-    border: 1px solid black;
+    border: 1px solid gray;
     border-right: 0;
   }
 

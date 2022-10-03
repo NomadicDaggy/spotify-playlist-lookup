@@ -40,11 +40,12 @@ props.playlist; // Playlist | undefined
 
 <style>
 div.playlist-result-card {
-  border-top: 1px solid black;
+  border-top: 1px solid gray;
   margin-top: -1px;
   padding: 1rem 0;
   cursor: pointer;
   color: var(--color-text);
+  background-color: white;
 }
 
 div.playlist-result-card > div {
@@ -91,7 +92,7 @@ div.playlist-description {
 @media only screen and (min-width: 768px) {
   div.playlist-result-card {
     margin-bottom: 1rem;
-    border: 1px solid black;
+    border: 1px solid gray;
     border-radius: 1rem;
   }
 

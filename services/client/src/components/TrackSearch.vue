@@ -84,7 +84,7 @@ const selectTrack = (track: any) => {
 input.track-name-input {
   max-width: 80vw;
   height: 2rem;
-  border: 1px solid black;
+  border: 1px solid gray;
   border-radius: 14px;
   padding-left: 14px;
   margin: 0 auto;
@@ -95,7 +95,7 @@ input.track-name-input {
 div.tracks-container {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid gray;
 }
 
 span.status-text {

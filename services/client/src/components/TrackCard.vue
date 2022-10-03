@@ -42,7 +42,7 @@ props.selected; // boolean
 <style>
 div.track-result-card {
   padding: 1rem;
-  border-top: 1px solid black;
+  border-top: 1px solid gray;
 
   display: flex;
   flex-direction: column;
@@ -72,8 +72,8 @@ span.track-album {
 }
 
 div.selected {
-  border-top: 1px solid black;
-  border-bottom: 1px solid black;
+  border-top: 1px solid gray;
+  border-bottom: 1px solid gray;
 
   cursor: default;
 
@@ -83,7 +83,7 @@ div.selected {
 @media only screen and (min-width: 768px) {
   div.track-result-card {
     margin: 0.5rem 0;
-    border: 1px solid black;
+    border: 1px solid gray;
     border-radius: 0.5rem;
   }
 
