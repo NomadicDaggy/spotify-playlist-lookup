@@ -20,7 +20,8 @@ const fetchTracks = () => {
   if (!searchTerm.value) {
     statusText.value =
       "Please enter text to search tracks by. It can even be just part of the track name.";
-
+    tracks.value = null;
+    router.replace({ name: "tracks" });
     return;
   }
 
@@ -95,7 +96,6 @@ input.track-name-input {
 div.tracks-container {
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid gray;
 }
 
 span.status-text {

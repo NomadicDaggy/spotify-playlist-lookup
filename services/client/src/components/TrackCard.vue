@@ -51,6 +51,10 @@ div.track-result-card {
   cursor: pointer;
 }
 
+div.track-result-card:last-child {
+  border-bottom: 1px solid gray;
+}
+
 span.track-name {
   font-size: 1rem;
   line-height: 1;

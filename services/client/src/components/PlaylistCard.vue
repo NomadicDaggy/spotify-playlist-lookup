@@ -48,6 +48,10 @@ div.playlist-result-card {
   background-color: white;
 }
 
+div.playlist-result-card:last-child {
+  border-bottom: 1px solid gray;
+}
+
 div.playlist-result-card > div {
   display: flex;
   flex-direction: row;

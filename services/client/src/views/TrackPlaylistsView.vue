@@ -85,7 +85,6 @@ div.playlist-results-container {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  border-bottom: 1px solid gray;
 }
 
 div.track-selected-note {
