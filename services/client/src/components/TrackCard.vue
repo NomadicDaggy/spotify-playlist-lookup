@@ -42,9 +42,7 @@ props.selected; // boolean
 <style>
 div.track-result-card {
   padding: 1rem;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  margin-top: -1px;
+  border-top: 1px solid black;
 
   display: flex;
   flex-direction: column;
@@ -56,24 +54,26 @@ div.track-result-card {
 span.track-name {
   font-size: 1rem;
   line-height: 1;
+  font-weight: 600;
 }
 
 span.track-artist {
   font-size: 0.8rem;
   line-height: 1;
+  font-weight: 600;
   color: gray;
 }
 
 span.track-album {
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   line-height: 1;
   color: gray;
   padding-top: 0.3rem;
 }
 
 div.selected {
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 
   cursor: default;
 
@@ -83,7 +83,7 @@ div.selected {
 @media only screen and (min-width: 768px) {
   div.track-result-card {
     margin: 0.5rem 0;
-    border: 1px solid var(--color-border);
+    border: 1px solid black;
     border-radius: 0.5rem;
   }
 

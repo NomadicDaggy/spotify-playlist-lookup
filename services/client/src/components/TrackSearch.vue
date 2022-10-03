@@ -95,6 +95,7 @@ input.track-name-input {
 div.tracks-container {
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid black;
 }
 
 span.status-text {
@@ -107,6 +108,7 @@ span.status-text {
   div.tracks-container {
     max-width: 600px;
     margin: 0 auto;
+    border-bottom: none;
   }
 }
 </style>
