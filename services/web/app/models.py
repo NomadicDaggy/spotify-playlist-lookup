@@ -149,14 +149,16 @@ class Track(db.Model):
             "albumName": self.album_name,
         }
 
-    def get_playlists(self):
+    def playlists_query(self):
         return (
             db.session.query(Playlist)
             .filter(Playlist.id == PlaylistTrack.playlist_id)
             .filter(Track.id == PlaylistTrack.track_id)
             .filter(Track.id == self.id)
-            .all()
         )
+
+    def get_playlists(self):
+        return self.playlists_query.all()
 
 
 # TODO: insert_playlist_tracks() does a bit too much and should be split.

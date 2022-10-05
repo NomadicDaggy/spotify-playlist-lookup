@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
 import PlaylistCard from "../components/PlaylistCard.vue";
 import { useTrackStore } from "../stores/track";
 import { storeToRefs } from "pinia";
 import TrackCard from "../components/TrackCard.vue";
+
+const reqPage = ref(1);
+const scrollComponent = ref<HTMLElement | null>(null);
+const stopLoading = ref(false);
 
 const router = useRouter();
 const route = useRoute();
@@ -14,15 +18,20 @@ const store = useTrackStore();
 const { storedTrack } = storeToRefs(store);
 
 const playlists = ref();
-const getPlaylists = () => {
+const getPlaylistsFromAPI = (url: string, append: boolean) => {
   axios
-    .get(
-      "http://localhost:1337/api/v1/tracks/" +
-        storedTrack.value?.spotifyID +
-        "/playlists"
-    )
+    .get(url)
     .then((response) => {
-      playlists.value = response.data["playlists"];
+      if (response.data["playlists"].length == 0) {
+        stopLoading.value = true;
+        return;
+      }
+
+      if (append && playlists.value) {
+        playlists.value = playlists.value.concat(response.data["playlists"]);
+      } else {
+        playlists.value = response.data["playlists"];
+      }
     })
     .catch((error) => {
       console.log(error);
@@ -30,7 +39,12 @@ const getPlaylists = () => {
 };
 
 if (storedTrack.value) {
-  getPlaylists();
+  getPlaylistsFromAPI(
+    "http://localhost:1337/api/v1/tracks/" +
+      storedTrack.value?.spotifyID +
+      "/playlists?page=1",
+    false
+  );
 } else {
   // If no value in pinia store, then the user has come here without first selecting a track,
   // rather they just followed a link straight to this page.
@@ -44,12 +58,50 @@ if (storedTrack.value) {
       store.$patch({
         storedTrack: response.data,
       });
-      getPlaylists();
+      getPlaylistsFromAPI(
+        "http://localhost:1337/api/v1/tracks/" +
+          storedTrack.value?.spotifyID +
+          "/playlists?page=1",
+        false
+      );
     })
     .catch((error) => {
       console.log(error);
     });
 }
+
+const loadMorePlaylists = () => {
+  if (stopLoading.value == true) {
+    console.log("reached end");
+    return;
+  }
+
+  console.log("loading more tracks");
+  getPlaylistsFromAPI(
+    "http://localhost:1337/api/v1/tracks/" +
+      storedTrack.value?.spotifyID +
+      "/playlists?page=" +
+      ++reqPage.value,
+    true
+  );
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+const handleScroll = () => {
+  let element = scrollComponent.value;
+  if (element == null) {
+    return;
+  }
+
+  if (element.getBoundingClientRect().bottom < window.innerHeight) {
+    loadMorePlaylists();
+  }
+};
 </script>
 
 <template>
@@ -67,7 +119,7 @@ if (storedTrack.value) {
       </div>
     </div>
 
-    <div class="playlists-container" v-if="playlists">
+    <div class="playlists-container" v-if="playlists" ref="scrollComponent">
       <span class="status-text">Playlists containing selected track:</span>
       <PlaylistCard
         v-for="(playlist, index) in playlists"

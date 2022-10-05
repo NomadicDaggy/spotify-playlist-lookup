@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, watch } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import TrackCard from "./TrackCard.vue";
@@ -15,13 +15,23 @@ const store = useTrackStore();
 const searchTerm = ref(route.query.name);
 const reqPage = ref(1);
 const scrollComponent = ref<HTMLElement | null>(null);
+const stopLoading = ref(false);
 const statusText = ref("Find playlists that contain a specific track");
 const tracks = ref<typeof Track | null>(null);
+
+watch(searchTerm, (_) => {
+  stopLoading.value = false;
+});
 
 const getTracksFromAPI = (url: string, append: boolean) => {
   axios
     .get(url)
     .then((response) => {
+      if (response.data["tracks"].length == 0) {
+        stopLoading.value = true;
+        return;
+      }
+
       let foundTrackCount = response.data["count"];
       statusText.value = `Found ${foundTrackCount} tracks.`;
 
@@ -56,6 +66,11 @@ const fetchTracks = () => {
 };
 
 const loadMoreTracks = () => {
+  if (stopLoading.value == true) {
+    console.log("reached end");
+    return;
+  }
+
   console.log("loading more tracks");
   getTracksFromAPI(
     "http://localhost:1337/api/v1/tracks?name=" +

@@ -68,6 +68,12 @@ class TrackPlaylists(Resource):
         if track is None:
             return {}, 404
 
-        playlists = track.get_playlists()
+        playlists_query = track.playlists_query()
+
+        args = parser.parse_args()
+        if args.page:
+            playlists = playlists_query.paginate(int(args.page), 20, False).items
+        else:
+            playlists = playlists_query.all()
 
         return make_response({"playlists": [p.as_json() for p in playlists]})
