@@ -130,7 +130,7 @@ const handleScroll = () => {
   </div>
 </template>
 
-<style>
+<style scoped>
 div.playlist-results-container {
   display: flex;
   flex-direction: column;

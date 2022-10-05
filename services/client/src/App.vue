@@ -100,7 +100,7 @@ div.site-name h1 {
   font-size: 1.2rem;
   line-height: 2rem;
   font-weight: 700;
-  color: gray;
+  color: var(--color-text);
 }
 
 @media only screen and (min-width: 768px) {
@@ -112,7 +112,7 @@ div.site-name h1 {
   }
 
   header {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 }
 </style>

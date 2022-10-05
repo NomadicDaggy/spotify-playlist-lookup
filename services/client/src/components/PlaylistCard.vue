@@ -44,7 +44,7 @@ props.playlist; // Playlist | undefined
   </a>
 </template>
 
-<style>
+<style scoped>
 div.playlist-result-card {
   border-top: 1px solid gray;
   margin-top: -1px;

@@ -39,7 +39,7 @@ props.selected; // boolean
   <span v-else>Loading...</span>
 </template>
 
-<style>
+<style scoped>
 div.track-result-card {
   padding: 1rem;
   border-top: 1px solid gray;
@@ -49,6 +49,10 @@ div.track-result-card {
   gap: 0.5rem;
 
   cursor: pointer;
+}
+
+div.track-result-card:first-child {
+  margin-top: 0;
 }
 
 div.track-result-card:last-child {

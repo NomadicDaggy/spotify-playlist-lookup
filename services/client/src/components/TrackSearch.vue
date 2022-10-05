@@ -12,16 +12,28 @@ const route = useRoute();
 const store = useTrackStore();
 // const { storedTrack } = storeToRefs(store);
 
-const searchTerm = ref(route.query.name);
 const reqPage = ref(1);
 const scrollComponent = ref<HTMLElement | null>(null);
 const stopLoading = ref(false);
-const statusText = ref("Find playlists that contain a specific track");
-const tracks = ref<typeof Track | null>(null);
+
+const defaultText = "";
+const statusText = ref(defaultText);
+
+const trackCount = ref("");
+const playlistCount = ref("");
+
+axios.get("http://localhost:1337/api/v1/simple-stats").then((response) => {
+  trackCount.value = response.data["trackCount"];
+  playlistCount.value = response.data["playlistCount"];
+});
+
+const searchTerm = ref(route.query.name);
 
 watch(searchTerm, (_) => {
   stopLoading.value = false;
 });
+
+const tracks = ref<typeof Track | null>(null);
 
 const getTracksFromAPI = (url: string, append: boolean) => {
   axios
@@ -48,8 +60,7 @@ const getTracksFromAPI = (url: string, append: boolean) => {
 
 const fetchTracks = () => {
   if (!searchTerm.value) {
-    statusText.value =
-      "Please enter text to search tracks by. It can even be just part of the track name.";
+    statusText.value = defaultText;
     tracks.value = null;
     router.replace({ name: "tracks" });
     reqPage.value = 0;
@@ -116,6 +127,14 @@ const handleScroll = () => {
 
 <template>
   <div class="track-search-container">
+    <div class="stats-counter">
+      Find one of
+      <span class="site-statistic">{{ playlistCount }}</span> Spotify playlists
+      <br />
+      by entering one of
+      <span class="site-statistic">{{ trackCount }}</span> tracks you want the
+      playlist to contain
+    </div>
     <input
       v-model="searchTerm"
       @keyup.enter="fetchTracks"
@@ -136,7 +155,18 @@ const handleScroll = () => {
   </div>
 </template>
 
-<style>
+<style scoped>
+div.stats-counter {
+  text-align: center;
+  line-height: 1.2;
+  padding-bottom: 2rem;
+  font-weight: 400;
+}
+
+span.site-statistic {
+  font-weight: 700;
+}
+
 input.track-name-input {
   max-width: 80vw;
   height: 2rem;
@@ -157,6 +187,7 @@ span.status-text {
   text-align: center;
   display: block;
   padding: 1rem;
+  line-height: 1.15;
 }
 
 @media only screen and (min-width: 768px) {
@@ -164,6 +195,10 @@ span.status-text {
     max-width: 600px;
     margin: 0 auto;
     border-bottom: none;
+  }
+
+  div.stats-counter {
+    font-size: 1.2rem;
   }
 }
 </style>
