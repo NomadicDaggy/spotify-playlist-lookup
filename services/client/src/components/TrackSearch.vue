@@ -67,11 +67,9 @@ const fetchTracks = () => {
 
 const loadMoreTracks = () => {
   if (stopLoading.value == true) {
-    console.log("reached end");
     return;
   }
 
-  console.log("loading more tracks");
   getTracksFromAPI(
     "http://localhost:1337/api/v1/tracks?name=" +
       searchTerm.value +

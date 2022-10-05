@@ -72,11 +72,9 @@ if (storedTrack.value) {
 
 const loadMorePlaylists = () => {
   if (stopLoading.value == true) {
-    console.log("reached end");
     return;
   }
 
-  console.log("loading more tracks");
   getPlaylistsFromAPI(
     "http://localhost:1337/api/v1/tracks/" +
       storedTrack.value?.spotifyID +
