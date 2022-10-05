@@ -17,6 +17,12 @@ parser.add_argument(
     location="args",
     required=False,
 )
+parser.add_argument(
+    "page",
+    dest="page",
+    location="args",
+    required=False,
+)
 
 
 class SearchTracks(Resource):
@@ -32,7 +38,16 @@ class SearchTracks(Resource):
             tracks_query = Track.query.filter(Track.name.ilike(f"%{args.name}%"))
             count = tracks_query.count()
 
-        if tracks_query:
+        if not tracks_query:
+            return {}
+
+        if args.page:
+            tracks_out = tracks_query.paginate(int(args.page), 20, False)
+            return {
+                "count": count,
+                "tracks": [track.as_json() for track in tracks_out.items],
+            }
+        else:
             if count < 50:
                 tracks_out = [track.as_json() for track in tracks_query.all()]
             else:
@@ -42,8 +57,7 @@ class SearchTracks(Resource):
                 "tracks": tracks_out,
             }
 
-        else:
-            return {}
+        return {}
 
 
 class TrackPlaylists(Resource):
