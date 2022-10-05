@@ -126,6 +126,8 @@ class Playlist(db.Model):
             "name": self.name,
             "ownerName": self.owner_name,
             "spotifyID": self.spotify_id,
+            "trackCount": self.track_count,
+            "followerCount": self.follower_count,
         }
 
 
