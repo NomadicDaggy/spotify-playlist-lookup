@@ -7,6 +7,8 @@ export interface Playlist {
   imageURL: string;
   ownerName: string;
   description: string;
+  followerCount: string;
+  trackCount: string;
 }
 
 export interface Props {
@@ -29,6 +31,10 @@ props.playlist; // Playlist | undefined
         <div>
           <h2 class="playlist-name">{{ playlist.name }}</h2>
           <span class="playlist-owner">{{ playlist.ownerName }}</span>
+          <span class="playlist-stats">
+            {{ playlist.followerCount }} likes <span class="dot">/</span>
+            {{ playlist.trackCount }} tracks
+          </span>
         </div>
       </div>
       <div class="playlist-description" v-if="playlist.description">
@@ -83,6 +89,7 @@ h2.playlist-name {
 span.playlist-owner {
   font-size: 1rem;
   line-height: 1;
+  font-weight: 500;
 }
 
 div.playlist-description {
@@ -90,6 +97,17 @@ div.playlist-description {
   text-align: left;
   line-height: 1;
   margin-top: 1rem;
+  color: gray;
+}
+
+span.playlist-stats {
+  line-height: 1;
+  font-size: 0.85rem;
+  font-stretch: condensed;
+}
+
+span.dot {
+  font-weight: 300;
   color: gray;
 }
 
@@ -102,6 +120,10 @@ div.playlist-description {
 
   div.playlist-result-card:hover {
     background-color: var(--green-background);
+  }
+
+  span.playlist-stats {
+    padding-top: 1rem;
   }
 }
 </style>
