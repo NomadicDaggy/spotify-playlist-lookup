@@ -117,10 +117,13 @@ class Playlist(db.Model):
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 
-    def as_dict(self):
+    def as_json(self):
         return {
-            c: getattr(self, c)
-            for c in ["spotify_id", "name", "description", "image_url", "owner_name"]
+            "description": self.description,
+            "imageURL": self.image_url,
+            "name": self.name,
+            "ownerName": self.owner_name,
+            "spotifyID": self.spotify_id,
         }
 
 
@@ -137,6 +140,14 @@ class Track(db.Model):
 
     def __repr__(self):
         return f"Track {self.id} {self.spotify_id} {self.name}"
+
+    def as_json(self):
+        return {
+            "spotifyID": self.spotify_id,
+            "name": self.name,
+            "artistName": self.artist_name,
+            "albumName": self.album_name,
+        }
 
     def get_playlists(self):
         return (
