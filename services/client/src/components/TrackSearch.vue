@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 import TrackCard from "./TrackCard.vue";
@@ -13,8 +13,28 @@ const store = useTrackStore();
 // const { storedTrack } = storeToRefs(store);
 
 const searchTerm = ref(route.query.name);
+const reqPage = ref(1);
+const scrollComponent = ref<HTMLElement | null>(null);
 const statusText = ref("Find playlists that contain a specific track");
 const tracks = ref<typeof Track | null>(null);
+
+const getTracksFromAPI = (url: string, append: boolean) => {
+  axios
+    .get(url)
+    .then((response) => {
+      let foundTrackCount = response.data["count"];
+      statusText.value = `Found ${foundTrackCount} tracks.`;
+
+      if (append && tracks.value) {
+        tracks.value = tracks.value.concat(response.data["tracks"]);
+      } else {
+        tracks.value = response.data["tracks"];
+      }
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
 
 const fetchTracks = () => {
   if (!searchTerm.value) {
@@ -22,28 +42,29 @@ const fetchTracks = () => {
       "Please enter text to search tracks by. It can even be just part of the track name.";
     tracks.value = null;
     router.replace({ name: "tracks" });
+    reqPage.value = 0;
     return;
   }
 
   // add param to url
   router.replace({ name: "tracks", query: { name: searchTerm.value } });
 
-  axios
-    .get("http://localhost:1337/api/v1/tracks?name=" + searchTerm.value)
-    .then((response) => {
-      let foundTrackCount = response.data["count"];
-      statusText.value = `Found ${foundTrackCount} tracks.`;
-
-      tracks.value = response.data["tracks"];
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  getTracksFromAPI(
+    "http://localhost:1337/api/v1/tracks?name=" + searchTerm.value + "&page=1",
+    false
+  );
 };
 
-if (searchTerm.value) {
-  fetchTracks();
-}
+const loadMoreTracks = () => {
+  console.log("loading more tracks");
+  getTracksFromAPI(
+    "http://localhost:1337/api/v1/tracks?name=" +
+      searchTerm.value +
+      "&page=" +
+      ++reqPage.value,
+    true
+  );
+};
 
 const selectTrack = (track: any) => {
   store.$patch({
@@ -57,6 +78,27 @@ const selectTrack = (track: any) => {
     },
   });
 };
+
+if (searchTerm.value) {
+  fetchTracks();
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+const handleScroll = () => {
+  let element = scrollComponent.value;
+  if (element == null) {
+    return;
+  }
+
+  if (element.getBoundingClientRect().bottom < window.innerHeight) {
+    loadMoreTracks();
+  }
+};
 </script>
 
 <template>
@@ -68,7 +110,7 @@ const selectTrack = (track: any) => {
       class="track-name-input"
     />
     <span class="status-text">{{ statusText }}</span>
-    <div class="tracks-container">
+    <div class="tracks-container" ref="scrollComponent">
       <TrackCard
         v-for="(track, index) in tracks"
         :track="track"
