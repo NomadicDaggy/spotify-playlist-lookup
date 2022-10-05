@@ -114,6 +114,8 @@ class Playlist(db.Model):
     description = db.Column(db.String(1000), nullable=False, server_default="")
     image_url = db.Column(db.String(300), nullable=True, server_default="")
     owner_name = db.Column(db.String(100), nullable=False, server_default="")
+    track_count = db.Column(db.Integer, nullable=False, default=0)
+    follower_count = db.Column(db.Integer, nullable=False, default=0)
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
 
@@ -192,6 +194,8 @@ def insert_playlists_tracks(playlist_dict, return_on_duplicate=True):
             description=playlist_dict["description"],
             image_url=playlist_dict["image_url"],
             owner_name=playlist_dict["owner_name"],
+            track_count=playlist_dict["track_count"],
+            follower_count=playlist_dict["follower_count"],
         )
         db.session.add(p)
         db.session.flush()
