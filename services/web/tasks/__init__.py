@@ -29,6 +29,8 @@ def process_data(playlist_ids):
     big_timeout_sender = tk.SyncSender(big_timeout_client)
     spotify = tk.Spotify(token, sender=big_timeout_sender)
 
+    playlist_data = None
+
     for p in playlist_ids:
         LOGGER.info(p)
         exists = Playlist.query.filter_by(spotify_id=p).count()
