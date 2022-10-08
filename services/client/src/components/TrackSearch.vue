@@ -221,12 +221,16 @@ onUnmounted(() => {
   <div id="dropzone" class="dropzone"></div>
   <div class="track-search-container">
     <div class="stats-counter">
-      Find one of
+      Currently we keep track of
       <span class="site-statistic">{{ playlistCount }}</span> Spotify playlists
-      <br />
-      by entering one of
-      <span class="site-statistic">{{ trackCount }}</span> tracks you want the
-      playlist to contain
+      and <span class="site-statistic">{{ trackCount }}</span> tracks.
+    </div>
+    <div class="enter-prompt">
+      <span>Enter a track name to find playlists that contain it.</span>
+      <span class="drag-drop-info">
+        <br />
+        Or drag the track from Spotify and drop anywhere.
+      </span>
     </div>
     <input
       v-model="searchTerm"
@@ -273,6 +277,15 @@ span.site-statistic {
   font-weight: 700;
 }
 
+div.enter-prompt {
+  text-align: center;
+  padding-bottom: 1rem;
+  line-height: 1.2;
+}
+span.drag-drop-info {
+  display: none;
+}
+
 input.track-name-input {
   max-width: 80vw;
   height: 2rem;
@@ -305,6 +318,10 @@ span.status-text {
 
   div.stats-counter {
     font-size: 1.2rem;
+  }
+
+  span.drag-drop-info {
+    display: inline;
   }
 }
 </style>
