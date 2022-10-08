@@ -89,6 +89,10 @@ nav div.right-links {
   padding-top: 5px;
 }
 
+nav div.right-links > a:hover {
+  background-color: unset;
+}
+
 div.right-links img {
   width: 25px;
   height: 25px;
