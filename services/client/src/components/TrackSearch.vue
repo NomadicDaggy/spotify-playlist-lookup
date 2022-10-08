@@ -6,6 +6,8 @@ import TrackCard from "./TrackCard.vue";
 import type Track from "./TrackCard.vue";
 import { useTrackStore } from "../stores/track";
 
+const api_root: string = import.meta.env.VITE_APP_ROOT_API;
+
 const router = useRouter();
 const route = useRoute();
 
@@ -23,7 +25,7 @@ const statusText = ref(defaultText);
 const trackCount = ref("");
 const playlistCount = ref("");
 
-axios.get("http://localhost:1337/api/v1/simple-stats").then((response) => {
+axios.get(api_root + "/simple-stats").then((response) => {
   trackCount.value = response.data["trackCount"];
   playlistCount.value = response.data["playlistCount"];
 });
@@ -68,7 +70,7 @@ const droppedTrack = ref<typeof Track | null>(null);
 
 function getSpecificTrack(spotifyID: string) {
   return axios
-    .get("http://localhost:1337/api/v1/tracks?spotifyID=" + spotifyID)
+    .get(api_root + "/tracks?spotifyID=" + spotifyID)
     .then((response) => {
       if (response.status == 200) {
         droppedTrack.value = response.data;
@@ -93,7 +95,7 @@ const fetchTracks = () => {
   router.replace({ name: "tracks", query: { name: searchTerm.value } });
 
   getTracksFromAPI(
-    "http://localhost:1337/api/v1/tracks?name=" + searchTerm.value + "&page=1",
+    api_root + "/tracks?name=" + searchTerm.value + "&page=1",
     false
   );
 };
@@ -104,10 +106,7 @@ const loadMoreTracks = () => {
   }
 
   getTracksFromAPI(
-    "http://localhost:1337/api/v1/tracks?name=" +
-      searchTerm.value +
-      "&page=" +
-      ++reqPage.value,
+    api_root + "/tracks?name=" + searchTerm.value + "&page=" + ++reqPage.value,
     true
   );
 };

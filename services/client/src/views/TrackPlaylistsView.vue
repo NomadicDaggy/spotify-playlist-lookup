@@ -7,6 +7,8 @@ import { useTrackStore } from "../stores/track";
 import { storeToRefs } from "pinia";
 import TrackCard from "../components/TrackCard.vue";
 
+const api_root: string = import.meta.env.VITE_APP_ROOT_API;
+
 const reqPage = ref(1);
 const scrollComponent = ref<HTMLElement | null>(null);
 const stopLoading = ref(false);
@@ -40,9 +42,7 @@ const getPlaylistsFromAPI = (url: string, append: boolean) => {
 
 if (storedTrack.value) {
   getPlaylistsFromAPI(
-    "http://localhost:1337/api/v1/tracks/" +
-      storedTrack.value?.spotifyID +
-      "/playlists?page=1",
+    api_root + "/tracks/" + storedTrack.value?.spotifyID + "/playlists?page=1",
     false
   );
 } else {
@@ -50,16 +50,14 @@ if (storedTrack.value) {
   // rather they just followed a link straight to this page.
   // So we need to get the track from the url parameter from our backend api
   axios
-    .get(
-      "http://localhost:1337/api/v1/tracks?spotifyID=" +
-        route.params.trackSpotifyID
-    )
+    .get(api_root + "/tracks?spotifyID=" + route.params.trackSpotifyID)
     .then((response) => {
       store.$patch({
         storedTrack: response.data,
       });
       getPlaylistsFromAPI(
-        "http://localhost:1337/api/v1/tracks/" +
+        api_root +
+          "/tracks/" +
           storedTrack.value?.spotifyID +
           "/playlists?page=1",
         false
@@ -76,7 +74,8 @@ const loadMorePlaylists = () => {
   }
 
   getPlaylistsFromAPI(
-    "http://localhost:1337/api/v1/tracks/" +
+    api_root +
+      "/tracks/" +
       storedTrack.value?.spotifyID +
       "/playlists?page=" +
       ++reqPage.value,
