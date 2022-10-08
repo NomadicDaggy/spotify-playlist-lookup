@@ -29,10 +29,14 @@ class SearchTracks(Resource):
     def get(self):
 
         args = parser.parse_args()
+        tracks_query = None
 
         if args.spotify_id:
             track = Track.query.filter_by(spotify_id=args.spotify_id).first()
-            return track.as_json()
+            if track:
+                return track.as_json()
+            else:
+                return {"message": "No such track"}, 404
 
         if args.name:
             tracks_query = Track.query.filter(Track.name.ilike(f"%{args.name}%"))

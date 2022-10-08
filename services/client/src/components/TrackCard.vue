@@ -12,6 +12,11 @@ export interface Track {
     default: "";
     required: true;
   };
+  albumName: {
+    type: String;
+    default: "";
+    required: true;
+  };
   spotifyID: {
     type: String;
     default: "";

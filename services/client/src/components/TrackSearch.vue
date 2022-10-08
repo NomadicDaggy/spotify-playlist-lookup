@@ -17,6 +17,7 @@ const scrollComponent = ref<HTMLElement | null>(null);
 const stopLoading = ref(false);
 
 const defaultText = "";
+const noTrackText = "We don't have this track, try a different one!";
 const statusText = ref(defaultText);
 
 const trackCount = ref("");
@@ -39,13 +40,18 @@ const getTracksFromAPI = (url: string, append: boolean) => {
   axios
     .get(url)
     .then((response) => {
-      if (response.data["tracks"].length == 0) {
+      let foundTrackCount = response.data["count"];
+
+      if (foundTrackCount == 0 && append) {
         stopLoading.value = true;
         return;
       }
 
-      let foundTrackCount = response.data["count"];
-      statusText.value = `Found ${foundTrackCount} tracks.`;
+      if (foundTrackCount > 0) {
+        statusText.value = `Found ${foundTrackCount} tracks.`;
+      } else {
+        statusText.value = noTrackText;
+      }
 
       if (append && tracks.value) {
         tracks.value = tracks.value.concat(response.data["tracks"]);
@@ -57,6 +63,23 @@ const getTracksFromAPI = (url: string, append: boolean) => {
       console.log(error);
     });
 };
+
+const droppedTrack = ref<typeof Track | null>(null);
+
+function getSpecificTrack(spotifyID: string) {
+  return axios
+    .get("http://localhost:1337/api/v1/tracks?spotifyID=" + spotifyID)
+    .then((response) => {
+      if (response.status == 200) {
+        console.log(response.data);
+        droppedTrack.value = response.data;
+      }
+    })
+    .catch(() => {
+      statusText.value = noTrackText;
+      console.clear(); // chrome shows error in console
+    });
+}
 
 const fetchTracks = () => {
   if (!searchTerm.value) {
@@ -103,16 +126,14 @@ const selectTrack = (track: any) => {
   });
 };
 
+watch(droppedTrack, (_) => {
+  selectTrack(droppedTrack.value);
+});
+
 if (searchTerm.value) {
   fetchTracks();
 }
 
-onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
-});
-onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
-});
 const handleScroll = () => {
   let element = scrollComponent.value;
   if (element == null) {
@@ -123,9 +144,76 @@ const handleScroll = () => {
     loadMoreTracks();
   }
 };
+
+var dropZone: HTMLElement | null = null;
+
+function showDropZone() {
+  if (dropZone) {
+    dropZone.style.display = "block";
+  }
+}
+function hideDropZone() {
+  if (dropZone) {
+    dropZone.style.display = "none";
+  }
+}
+function allowDrag(e: Event) {
+  let c = true;
+  if (c) {
+    // Test that the item being dragged is a valid one
+    e.preventDefault();
+  }
+}
+function handleDrop(e: DragEvent) {
+  e.preventDefault();
+  hideDropZone();
+
+  if (!e.dataTransfer) {
+    return;
+  }
+
+  let t = e.dataTransfer.getData("Text");
+  // in case link is in form 'https://open.spotify.com/track/3rmo8F54jFF8OgYsqTxm5d?si=c9a79044c8354ff0'
+  // or has any other url query
+  t = t.split("?")[0];
+
+  let spotifyLinkPrefix = "https://open.spotify.com/track/";
+  if (!t.startsWith(spotifyLinkPrefix)) {
+    return;
+  }
+
+  let trackSpotifyID = t.split("/").at(-1); // ignore error
+  if (!(trackSpotifyID.length == 22)) {
+    return;
+  }
+
+  getSpecificTrack(trackSpotifyID);
+}
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+
+  dropZone = document.getElementById("dropzone");
+
+  if (dropZone) {
+    window.addEventListener("dragenter", showDropZone);
+    dropZone.addEventListener("dragenter", allowDrag);
+    dropZone.addEventListener("dragover", allowDrag);
+    dropZone.addEventListener("dragleave", hideDropZone);
+    dropZone.addEventListener("drop", handleDrop);
+  }
+});
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("dragenter", allowDrag);
+  window.removeEventListener("dragover", allowDrag);
+  window.removeEventListener("dragleave", hideDropZone);
+  window.removeEventListener("drop", handleDrop);
+});
 </script>
 
 <template>
+  <div id="dropzone" class="dropzone"></div>
   <div class="track-search-container">
     <div class="stats-counter">
       Find one of
@@ -156,6 +244,19 @@ const handleScroll = () => {
 </template>
 
 <style scoped>
+div.dropzone {
+  box-sizing: border-box;
+  display: none;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 99999;
+
+  background: var(--green-background);
+}
+
 div.stats-counter {
   text-align: center;
   line-height: 1.2;
