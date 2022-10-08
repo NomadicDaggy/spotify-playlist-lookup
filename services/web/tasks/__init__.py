@@ -80,3 +80,4 @@ def process_data(playlist_ids):
 
         # insert into database
         insert_playlists_tracks(playlist_data)
+        time.sleep(2)  # TODO: remove after repopulating prod database

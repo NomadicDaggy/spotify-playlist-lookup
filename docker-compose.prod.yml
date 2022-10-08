@@ -31,7 +31,7 @@ services:
     environment:
       - NODE_ENV=production
     ports:
-      - 80:80
+      - 1337:80
   api-worker01:
     build: ./services/web
     command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info --concurrency=2
@@ -95,7 +95,7 @@ services:
   nginx:
     build: ./services/nginx
     ports:
-      - 1337:80
+      - 1338:80
     depends_on:
       - web
 
