@@ -71,7 +71,6 @@ function getSpecificTrack(spotifyID: string) {
     .get("http://localhost:1337/api/v1/tracks?spotifyID=" + spotifyID)
     .then((response) => {
       if (response.status == 200) {
-        console.log(response.data);
         droppedTrack.value = response.data;
       }
     })
@@ -168,7 +167,11 @@ function handleDrop(e: DragEvent) {
   e.preventDefault();
   hideDropZone();
 
+  let failText =
+    "Spotify track link should look like 'https://open.spotify.com/track/22numbersOrLetters'";
+
   if (!e.dataTransfer) {
+    statusText.value = failText;
     return;
   }
 
@@ -179,11 +182,13 @@ function handleDrop(e: DragEvent) {
 
   let spotifyLinkPrefix = "https://open.spotify.com/track/";
   if (!t.startsWith(spotifyLinkPrefix)) {
+    statusText.value = failText;
     return;
   }
 
   let trackSpotifyID = t.split("/").at(-1); // ignore error
   if (!(trackSpotifyID.length == 22)) {
+    statusText.value = failText;
     return;
   }
 
