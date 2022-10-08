@@ -1,0 +1,33 @@
+@import "./base.css";
+
+#app {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 99vh;
+}
+
+body {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+main {
+  height: 100%;
+  margin-bottom: auto;
+}
+
+a,
+.green {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+}
+
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+
+@media (min-width: 1024px) {
+}

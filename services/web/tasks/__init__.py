@@ -46,6 +46,7 @@ def process_data(playlist_ids):
                 try:
                     playlist_data = mp.get_data()
                     cont = False
+
                 except (
                     tk.NotFound,
                     sq.exc.DataError,
@@ -55,15 +56,18 @@ def process_data(playlist_ids):
                 ) as e:
                     LOGGER.error(e)
                     cont = False
+
                 except (
                     tk.ServiceUnavailable,
                     tk.TooManyRequests,
                 ) as e:
                     LOGGER.error(e)
+
                     try:
                         cooldown_time = int(e.response.headers["retry-after"]) + 1
                     except KeyError:
                         cooldown_time = 100
+
                     LOGGER.error(
                         f"Sleeping for {cooldown_time} seconds, before retrying"
                     )

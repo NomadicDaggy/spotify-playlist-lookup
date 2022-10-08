@@ -22,7 +22,17 @@ def seed_db():
     db.session.add(user)
     db.session.commit()
 
-    tasks.process_data.delay(["50CP5OXFyr6qmCX8wZoum5", "6tlAGIxetz8wFTHeVIvC0N"])
+    tasks.process_data.delay(
+        [
+            "50CP5OXFyr6qmCX8wZoum5",
+            "6tlAGIxetz8wFTHeVIvC0N",
+            "37i9dQZF1DZ06evO3KmLhR",
+            "55KWsRVvW4i65Gr4evwEm6",
+            "4UEdX1S5H1LWKIb7ttTG3d",
+            "3S4bx7lw9hhwlLC9HpPs6c",
+            "2aCLBh2HtE2Ir7jyRaxZbC",
+        ]
+    )
 
 
 @cli.command("refresh_playlists")

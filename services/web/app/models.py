@@ -114,8 +114,21 @@ class Playlist(db.Model):
     description = db.Column(db.String(1000), nullable=False, server_default="")
     image_url = db.Column(db.String(300), nullable=True, server_default="")
     owner_name = db.Column(db.String(100), nullable=False, server_default="")
+    track_count = db.Column(db.Integer, nullable=False, default=0)
+    follower_count = db.Column(db.Integer, nullable=False, default=0)
 
     tracks = db.relationship("PlaylistTrack", back_populates="playlist")
+
+    def as_json(self):
+        return {
+            "description": self.description,
+            "imageURL": self.image_url,
+            "name": self.name,
+            "ownerName": self.owner_name,
+            "spotifyID": self.spotify_id,
+            "trackCount": self.track_count,
+            "followerCount": self.follower_count,
+        }
 
 
 class Track(db.Model):
@@ -124,20 +137,32 @@ class Track(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     spotify_id = db.Column(db.String(22), index=True, unique=True, nullable=False)
     name = db.Column(db.String(200), index=True, nullable=False)
+    artist_name = db.Column(db.String(200), nullable=False, server_default="")
+    album_name = db.Column(db.String(100), nullable=False, server_default="")
 
     playlists = db.relationship("PlaylistTrack", back_populates="track")
 
     def __repr__(self):
         return f"Track {self.id} {self.spotify_id} {self.name}"
 
-    def get_playlists(self):
+    def as_json(self):
+        return {
+            "spotifyID": self.spotify_id,
+            "name": self.name,
+            "artistName": self.artist_name,
+            "albumName": self.album_name,
+        }
+
+    def playlists_query(self):
         return (
             db.session.query(Playlist)
             .filter(Playlist.id == PlaylistTrack.playlist_id)
             .filter(Track.id == PlaylistTrack.track_id)
             .filter(Track.id == self.id)
-            .all()
         )
+
+    def get_playlists(self):
+        return self.playlists_query.all()
 
 
 # TODO: insert_playlist_tracks() does a bit too much and should be split.
@@ -171,6 +196,8 @@ def insert_playlists_tracks(playlist_dict, return_on_duplicate=True):
             description=playlist_dict["description"],
             image_url=playlist_dict["image_url"],
             owner_name=playlist_dict["owner_name"],
+            track_count=playlist_dict["track_count"],
+            follower_count=playlist_dict["follower_count"],
         )
         db.session.add(p)
         db.session.flush()
@@ -203,7 +230,12 @@ def insert_playlists_tracks(playlist_dict, return_on_duplicate=True):
         #
         # TODO: how to efficiently check dupes in list against database table?
         if Track.query.filter_by(spotify_id=track_sid).count() == 0:
-            t = Track(spotify_id=track_sid, name=track["name"])
+            t = Track(
+                spotify_id=track_sid,
+                name=track["name"],
+                artist_name=track["artist_name"],
+                album_name=track["album_name"],
+            )
             db.session.add(t)
             db.session.flush()
         else:

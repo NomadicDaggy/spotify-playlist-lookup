@@ -46,12 +46,17 @@ class MaterializedPlaylist:
         return {
             "id": track_api_dict["track"]["id"],
             "name": track_api_dict["track"]["name"][:200],
+            "artist_name": ", ".join(
+                [a["name"] for a in track_api_dict["track"]["artists"]]
+            )[:200],
+            "album_name": track_api_dict["track"]["album"]["name"][:100],
         }
 
     def get_data(self, include_tracks=True) -> dict:
 
         p = self.spotify.playlist(
-            self.playlist_id, fields="name,description,id,images.url,owner.display_name"
+            self.playlist_id,
+            fields="name,description,id,images.url,owner.display_name,followers.total",
         )
 
         self.data = {
@@ -59,6 +64,8 @@ class MaterializedPlaylist:
             "name": p["name"][:100],
             "description": p["description"][:1000],
             "owner_name": p["owner"]["display_name"][:100],
+            "track_count": 0,
+            "follower_count": int(p["followers"]["total"]),
         }
 
         self.data["image_url"] = ""
@@ -69,7 +76,7 @@ class MaterializedPlaylist:
             self.data["tracks"] = [
                 self._format_track(t) for t in self._get_playlist_tracks_from_api()
             ]
-
+            self.data["track_count"] = len(self.data["tracks"])
         return self.data
 
 

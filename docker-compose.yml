@@ -18,9 +18,22 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+  client:
+    build: ./services/client
+    image: vue-client
+    stdin_open: true
+    volumes:
+      - ./services/client:/usr/src/app
+      - /node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=development
+    command: npm run dev
+    ports:
+      - 8080:8080
   api-worker01:
     build: ./services/web
-    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info
+    command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info --concurrency=2
     environment:
       - APP_ENV=Dev
     env_file:
@@ -46,13 +59,13 @@ services:
     env_file:
       - ./.env.flower
     ports:
-      - "5556:5555"
+      - 5556:5555
     depends_on:
       - broker-rabbitmq
   broker-rabbitmq:
     image: "rabbitmq:3.9.22-management"
     ports:
-      - "15673:15672"
+      - 15673:15672
     environment:
       - RABBITMQ_DEFAULT_USER=rabbit_user
       - RABBITMQ_DEFAULT_PASS=rabbit_password
