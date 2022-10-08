@@ -135,3 +135,5 @@ services/web/app/media/
 .vscode/settings.json
 .env.flower.prod
 .env.sample
+
+node_modules
