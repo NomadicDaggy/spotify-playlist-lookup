@@ -19,6 +19,19 @@ services:
         condition: service_healthy
       db:
         condition: service_healthy
+  client:
+    build:
+      context: ./services/client
+      dockerfile: Dockerfile.prod
+    image: vue-client
+    stdin_open: true
+    volumes:
+      - ./services/client:/usr/src/app
+      - /node_modules
+    environment:
+      - NODE_ENV=production
+    ports:
+      - 80:80
   api-worker01:
     build: ./services/web
     command: watchmedo auto-restart --directory=./ --pattern=*.py --recursive -- celery -A app.celery_app:app worker --loglevel=info --concurrency=2

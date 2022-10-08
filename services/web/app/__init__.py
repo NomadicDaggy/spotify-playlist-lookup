@@ -26,7 +26,7 @@ def create_app():
     app.config.from_object(confname)
     app.secret_key = app.config["SECRET_KEY"]
 
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})  # noqa: F841
 
     db.init_app(app)
     migrate.init_app(app, db)

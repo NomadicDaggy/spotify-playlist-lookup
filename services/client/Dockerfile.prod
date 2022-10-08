@@ -1,0 +1,15 @@
+#build-stage
+FROM node:16-alpine as build-stage
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+RUN mkdir -p node_modules/.cache && chmod -R 777 node_modules/.cache
+RUN mkdir -p node_modules/.vite && chmod -R 777 node_modules/.vite
+COPY ./ /usr/src/app/
+RUN npm run build
+
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

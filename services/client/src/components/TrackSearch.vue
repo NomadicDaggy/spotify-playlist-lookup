@@ -185,7 +185,11 @@ function handleDrop(e: DragEvent) {
     return;
   }
 
-  let trackSpotifyID = t.split("/").at(-1); // ignore error
+  let trackSpotifyID: string | undefined = t.split("/").at(-1); // ignore error
+  if (!trackSpotifyID) {
+    return;
+  }
+
   if (!(trackSpotifyID.length == 22)) {
     statusText.value = failText;
     return;
