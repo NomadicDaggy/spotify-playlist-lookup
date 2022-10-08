@@ -12,6 +12,15 @@ import FooterNotice from "./components/FooterNotice.vue";
           <RouterLink to="/about">About</RouterLink>
         </div>
         <div class="right-links">
+          <a href="https://buymeacoffee.com/nomadicdaggy" target="_blank">
+            <div>
+              <img
+                id="bmc-logo"
+                :src="'/bmc-logo.png'"
+                alt="Buy Me a Coffee Logo"
+              />
+            </div>
+          </a>
           <a
             href="https://github.com/NomadicDaggy/spotify-playlist-lookup"
             target="_blank"
@@ -71,15 +80,16 @@ nav div.left-links a {
   padding: 0.4rem 1rem;
 }
 
-nav div.right-links div {
-  height: 100%;
+nav div.right-links {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  flex-direction: row;
   padding-right: 1rem;
+  gap: 1rem;
+  align-items: center;
+  padding-top: 5px;
 }
 
-img#gh-logo {
+div.right-links img {
   width: 25px;
   height: 25px;
 }
