@@ -108,7 +108,7 @@ def import_playlists():
         if len(playlist_ids) > 500:
             chunk_size = 100
             for pos in range(0, len(playlist_ids), chunk_size):
-                chunk = playlist_ids[pos : pos + chunk_size]
+                chunk = playlist_ids[pos: (pos + chunk_size)]
                 tasks.process_data.delay(chunk)
         else:
             tasks.process_data.delay(playlist_ids)
