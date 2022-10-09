@@ -104,7 +104,14 @@ def import_playlists():
     form = PlaylistInputForm()
     if form.validate_on_submit():
         playlist_ids = form.playlist_ids.data.split(",")
-        tasks.process_data.delay(playlist_ids)
+        # if very many playlists, chunk into 100s
+        if len(playlist_ids) > 500:
+            chunk_size = 100
+            for pos in range(0, len(playlist_ids), chunk_size):
+                chunk = playlist_ids[pos : pos + chunk_size]
+                tasks.process_data.delay(chunk)
+        else:
+            tasks.process_data.delay(playlist_ids)
 
     return render_template("import_playlists.html", title="Import Playlists", form=form)
 
