@@ -142,6 +142,8 @@ class Track(db.Model):
 
     playlists = db.relationship("PlaylistTrack", back_populates="track")
 
+    __table_args__ = (db.Index('name_idx', 'name', postgresql_using='gin', postgresql_ops={ 'name': 'gin_trgm_ops',}), )
+
     def __repr__(self):
         return f"Track {self.id} {self.spotify_id} {self.name}"
 
