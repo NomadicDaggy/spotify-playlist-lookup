@@ -25,6 +25,8 @@ const statusText = ref(defaultText);
 const trackCount = ref("");
 const playlistCount = ref("");
 
+const loadingVisible = ref(false);
+
 axios.get(api_root + "/simple-stats").then((response) => {
   trackCount.value = response.data["trackCount"];
   playlistCount.value = response.data["playlistCount"];
@@ -39,6 +41,7 @@ watch(searchTerm, (_) => {
 const tracks = ref<typeof Track | null>(null);
 
 const getTracksFromAPI = (url: string, append: boolean) => {
+  loadingVisible.value = true;
   axios
     .get(url)
     .then((response) => {
@@ -46,6 +49,7 @@ const getTracksFromAPI = (url: string, append: boolean) => {
 
       if (foundTrackCount == 0 && append) {
         stopLoading.value = true;
+        loadingVisible.value = false;
         return;
       }
 
@@ -60,9 +64,12 @@ const getTracksFromAPI = (url: string, append: boolean) => {
       } else {
         tracks.value = response.data["tracks"];
       }
+
+      loadingVisible.value = false;
     })
     .catch((error) => {
       console.log(error);
+      loadingVisible.value = false;
     });
 };
 
@@ -242,7 +249,7 @@ onUnmounted(() => {
       class="track-name-input"
     />
     <span class="status-text">{{ statusText }}</span>
-    <div class="tracks-container" ref="scrollComponent">
+    <div class="tracks-container" ref="scrollComponent" v-if="tracks">
       <TrackCard
         v-for="(track, index) in tracks"
         :track="track"
@@ -252,10 +259,21 @@ onUnmounted(() => {
         @click="selectTrack(track)"
       />
     </div>
+    <div v-else class="loading" :class="{ 'loading-visible': loadingVisible }">
+      Loading...(in case of high demand, this can take upwards of 30 seconds)
+    </div>
   </div>
 </template>
 
 <style scoped>
+div.loading {
+  text-align: center;
+  display: none;
+}
+div.loading-visible {
+  display: block;
+}
+
 div.dropzone {
   box-sizing: border-box;
   display: none;
