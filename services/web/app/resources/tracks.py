@@ -1,7 +1,8 @@
 from flask_restful import Resource, reqparse
 from flask import make_response
+from sqlalchemy.sql.expression import func
 
-from app.models import Playlist, Track
+from app.models import Track
 
 
 parser = reqparse.RequestParser()
@@ -39,7 +40,7 @@ class SearchTracks(Resource):
                 return {"message": "No such track"}, 404
 
         if args.name:
-            tracks_query = Track.query.filter(Track.name.ilike(f"%{args.name}%"))
+            tracks_query = Track.query.filter(Track.name.ilike(f"%{args.name}%")).order_by(func.length(Track.name))
             count = tracks_query.count()
 
         if not tracks_query:
@@ -51,6 +52,8 @@ class SearchTracks(Resource):
                 "count": count,
                 "tracks": [track.as_json() for track in tracks_out.items],
             }
+        # deprecated
+        # only used on the v1 page
         else:
             if count < 50:
                 tracks_out = [track.as_json() for track in tracks_query.all()]
