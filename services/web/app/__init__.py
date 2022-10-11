@@ -3,7 +3,7 @@ import logging
 from flask import Flask
 from flask_cors import CORS
 
-from extensions import db, migrate, celery, cache
+from extensions import db, migrate, celery, cache, limiter
 from app.api import api
 
 
@@ -32,6 +32,7 @@ def create_app():
     migrate.init_app(app, db)
     init_celery(app)
     cache.init_app(app)
+    limiter.init_app(app)
 
     api.init_app(app)
 
