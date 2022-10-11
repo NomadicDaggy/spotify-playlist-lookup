@@ -90,9 +90,10 @@ function getSpecificTrack(spotifyID: string) {
 }
 
 const fetchTracks = () => {
+  tracks.value = null;
+
   if (!searchTerm.value) {
     statusText.value = defaultText;
-    tracks.value = null;
     router.replace({ name: "tracks" });
     reqPage.value = 0;
     return;
@@ -260,7 +261,7 @@ onUnmounted(() => {
       />
     </div>
     <div v-else class="loading" :class="{ 'loading-visible': loadingVisible }">
-      Loading...(in case of high demand, this can take upwards of 30 seconds)
+      Loading...(in case of high demand or short search term this can take upwards of 30 seconds)
     </div>
   </div>
 </template>
