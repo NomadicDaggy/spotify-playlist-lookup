@@ -1,6 +1,6 @@
 # Spotify playlist lookup
 
-Service, that allows lookup of Spotify playlists by songs that they contain. 
+Service that allows lookup of Spotify playlists by songs that they contain. 
 
 Site available in BETA at https://playlists.dags.dev
 
@@ -10,29 +10,29 @@ Upstream: https://github.com/NomadicDaggy/flask-on-docker
 
 ### Technical
 
-- [x] **Database Migrations** - needed for persistant prod db to be able to update it without a hassle or data loss.
-- [x] **Templates** - together with WTForms would enable easy page creation.
-- [x] **App Factory** - enables setting up a separate app for each test.
-- [x] **Tests** - need the scaffolding and refactoring for testing to work at all.
-- [x] **Hot Reload** - make the dev app hot-reloadable for way easier front-end development.
-- [x] **Analytics** - add something like google analytics, but not that.
-- [x] **Background Tasks** - add Celery and RabbitMQ, get user playlists in the background.
-- [ ] **RESTful API** - split out the api for playlist import/search and use it from the front-end #16.
-- [ ] **JSON Schema** - Add JSON Schema validation #17.
-- [ ] **Async** - currently the server can serve only 1 client at a time. So a large playlist import might block other users.
-- [ ] **Logs** - docker-compose does logging, but the logs are not persisted anywhere.
-- [ ] **Proper Error Handling** - any exception would show up to a user as an *Internal Server Error*.
-- [ ] **Comprehensive Tests** - tests with reasonable coverage (and testing coverage as a thing we check).
-- [ ] **CI & CD** - automatically test and deploy the main branch if tests pass.
+- [x] **Database Migrations** - Needed for persistent prod db to update it without a hassle or data loss
+- [x] **Templates** - Together with WTForms, enables easy page creation
+- [x] **App Factory** - Enables setting up a separate app for each test
+- [x] **Tests** - Needs the scaffolding and refactoring for testing to work at all
+- [x] **Hot Reload** - Make the dev app hot-reloadable for way easier front-end development
+- [x] **Analytics** - Add something like Google Analytics, but not that
+- [x] **Background Tasks** - Add Celery and RabbitMQ, get user playlists in the background
+- [ ] **RESTful API** - Split out the API for playlist import/search and use it from the front-end #16
+- [ ] **JSON Schema** - Add JSON Schema validation #17
+- [ ] **Async** - Currently the server can serve only 1 client at a time, so a large playlist import might block other users
+- [ ] **Logs** - docker-compose does logging, but the logs are not persisted anywhere
+- [ ] **Proper Error Handling** - Any exception shows up to users as an *Internal Server Error*
+- [ ] **Comprehensive Tests** - Tests with reasonable coverage (and testing coverage as a thing we check)
+- [ ] **CI & CD** - Automatically test and deploy the main branch if tests pass
 
 ### App features
 
-- [x] **Style** - front-end literally anything else than plain HTML.
-- [x] **Playlist Import** - importing playlists from the client.
-- [x] **Track Search** - searching playlists by tracks from the client.
-- [ ] **Spotify Login** - allow login with Spotify and automatically import user playlists.
-- [ ] **Playlist Updates** - periodically update oldest playlists with their new tracks (as a job of some sort).
-- [ ] **Mobile Front-End** - currently the layout is not responsive.
+- [x] **Style** - The front-end — literally anything other than plain HTML
+- [x] **Playlist Import** - Importing playlists from the client
+- [x] **Track Search** - Searching playlists by tracks from the client
+- [ ] **Spotify Login** - Allow login with Spotify and automatically import user playlists
+- [ ] **Playlist Updates** - Periodically update oldest playlists with their new tracks (as a job of some sort)
+- [ ] **Mobile Front-End** - The layout is currently not responsive
 
 ## Usage
 
@@ -44,9 +44,9 @@ Fill `.env.spotify` with your apps details.
 
 For running tests, use `test_run.sh`.
 
-For running the development version see `dev_run.sh`.
+For running the development version, see `dev_run.sh`.
 
-For production deployment use `prod_run.sh`, but that also requires `.env.prod` and `.env.prod.db` to be created and filled.
+For production deployment, use `prod_run.sh`, but that also requires `.env.prod` and `.env.prod.db` to be created and filled.
 
 ### Commonly needed things
 
