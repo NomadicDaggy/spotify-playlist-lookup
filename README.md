@@ -4,8 +4,6 @@ Service that allows lookup of Spotify playlists by songs that they contain.
 
 As featured on [Hacker News](https://news.ycombinator.com/item?id=33150086)
 
-Site available in BETA at https://playlists.dags.dev
-
 ## Rough plans (in no particular order)
 
 ### Technical
